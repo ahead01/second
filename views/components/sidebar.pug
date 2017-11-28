@@ -1,0 +1,25 @@
+#sidebar-wrapper
+    ul.sidebar-nav
+        li.sidebar-brand(style='position: relative;')
+            a.wsite-menu-item(href='/', style='position: relative;')
+                | Home
+        li.sidebar-brand(style='position: relative;')
+            a.wsite-menu-item(href='/sign-in.html', style='position: relative;')
+                | Sign In
+        li.sidebar-brand(style='position: relative;')
+            a.wsite-menu-item(href='/portfolio.html', style='position: relative;')
+                | Portfolio
+        li.sidebar-brand(style='position: relative;')
+            a.wsite-menu-item(href='/blog.html', style='position: relative;')
+                | Blog
+        li.sidebar-brand(style='position: relative;')
+            a.wsite-menu-item(href='/about.html', style='position: relative;')
+                | About
+        li.sidebar-brand(style='position: relative;')
+            a.wsite-menu-item(href='/contact.html', style='position: relative;')
+                | Contact
+    script.
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });

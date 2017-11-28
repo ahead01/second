@@ -1,0 +1,13 @@
+@LinkColor: @site-primary-color;
+@LinkUnderline: @site-primary-color;
+@colorLink: @site-primary-color;
+@GalleryBg: darken(@site-primary-color, 5%);
+@buttonColor: darken(@site-primary-color, 5%);
+@hoverButtonColor: lighten(@site-primary-color, 90%);
+@bghoverButtonColor: darken(@site-primary-color, 3%);
+@inputBorderFocus: darken(@site-primary-color, 5%);
+@footerFontIconColor: #fff;
+@bodyFontColor: #676672;
+@categoryBg: fade(darken(@site-primary-color, 5%), 70%);
+@mobileSidebarBg: darken(@site-primary-color, 5%);
+@viewCategoryDropdown: @site-primary-color;

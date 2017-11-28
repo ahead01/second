@@ -1,0 +1,23 @@
+extends layout
+block content
+  include components/navbar
+  div.jumbotron
+    h1.jumbotron-heading Error: #{error.status}
+    div.justify-content-lg-center
+      p.text-center.lead Error was type:  #{error.type}
+    br
+    div.justify-content-lg-center
+      p.text-center.my-2 Error Message: #{error.message}
+    br
+    div.justify-content-center
+      p.text-center.my-2 Error Context: #{error.context}
+    br
+    div.justify-content-center
+      p.text-center.my-2 Error Reason:       #{error.reason}
+    br
+    div.justify-content-center
+      p.text-center.my-2 Error Path:       #{error.path}
+  footer
+    div.card-footer.card-outline-primary.justify-content-center
+      label.card-link
+        a(href="/") Home

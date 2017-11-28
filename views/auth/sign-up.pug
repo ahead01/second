@@ -1,0 +1,46 @@
+extends ../layout
+block content
+    include ../components/navbar
+    .container
+        .row
+            .col-md-3
+                if errors
+                    div.alert.alert-info There Were Some Errors!
+                        each prob, index in errors
+                            .row.pt-1
+                                .alert.alert-danger
+                                    label= index
+                                    label= prob
+
+
+            .col-md-6
+                .card.text-white.p-5.bg-info
+                    .card-body
+                        h1.mb-4.text-center Signup
+                        form#SignUpForm(action='/auth/sign-up/new', method='post')
+                            .form-group
+                                .row
+                                    .m-2
+                                        label(for='fname') First Name
+                                        input#fname.form-control(type='text', placeholder='First Name', name='fname',
+                                        value='test_fname')
+                                        label(for='lname') Last Name
+                                        input#lname.form-control(type='text', placeholder='Last Name', name='lname',
+                                        value='test_lname')
+                            .form-group
+                                label Username
+                                input.form-control(type='text', placeholder='Username', name='username',
+                                value='test_user')
+                            .form-group
+                                label Email address
+                                input.form-control(type='email', placeholder='Enter email', name='email',
+                                value= undefined === info ? 'test_email@gmail.com' : info.email)
+                            .form-group
+                                label Password
+                                input.form-control(type='password', placeholder='Password', name='password',
+                                value='test_pass')
+
+                            .form-group
+                                .row
+                                    button.btn.btn-secondary.col.m-2(type='submit') Sign Up
+

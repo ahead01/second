@@ -1,0 +1,42 @@
+extends ../layout
+block content
+    include ../components/navbar
+    .container
+        .row
+            .col-md-3
+                if info
+                    if info.errors
+                        div.alert.alert-info There Were Some Errors!
+                            each prob, index in info.errors
+                                .row.pt-1
+                                    .alert.alert-danger
+                                        label= index
+                                        label= prob
+            .col-md-6
+                .card.text-white.p-5.bg-info
+                    .card-body
+                        h1.mb-4.text-center Signin or Signup
+                        form#authForm(action='/auth/sign-in', method='post')
+                            .form-group
+                                label User Name
+                                input.form-control(type='text', placeholder='User Name', name='username',
+                                value= undefined === info.username ? 'test_user' : info.username)
+                            .form-group
+                                label Email address
+                                input.form-control(type='text', placeholder='Enter email', name='email',
+                                value= undefined === info.email ? 'test_email@gamil.com' : info.email)
+                            .form-group
+                                label Password
+                                input.form-control(type='password', placeholder='Password', name='password',
+                                value='test_pass')
+                            .form-group
+                                .row
+                                        button.btn.btn-secondary.col.m-2(type='submit', OnClick='SetSignIn()') Login
+                                        button.btn.btn-secondary.col.m-2(type='submit', OnClick='SetSignUp()') Sign Up
+                                        script.
+                                            function SetSignUp() {
+                                                $("#authForm").attr("action", '/auth/sign-up');
+                                            };
+                                            function SetSignIn() {
+                                                $("#authForm").attr("action", '/auth/sign-in');
+                                            };
