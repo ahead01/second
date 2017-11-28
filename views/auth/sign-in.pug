@@ -33,10 +33,15 @@ block content
                                 .row
                                         button.btn.btn-secondary.col.m-2(type='submit', OnClick='SetSignIn()') Login
                                         button.btn.btn-secondary.col.m-2(type='submit', OnClick='SetSignUp()') Sign Up
-                                        script.
-                                            function SetSignUp() {
-                                                $("#authForm").attr("action", '/auth/sign-up');
-                                            };
-                                            function SetSignIn() {
-                                                $("#authForm").attr("action", '/auth/sign-in');
-                                            };
+                        .container.align-self-center.align-items-center
+                            a(href="/auth/google" class="btn btn-danger")
+                                span.fa.fa-google-plus
+                                | Sign In With Google
+
+                        script.
+                                function SetSignUp() {
+                                    $("#authForm").attr("action", '/auth/sign-up');
+                                };
+                                function SetSignIn() {
+                                    $("#authForm").attr("action", '/auth/sign-in');
+                                };

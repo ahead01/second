@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const UserSchema = new mongoose.Schema({
-    username: { type: String, required: [true, 'Username is required!'], unique: [true, 'Username already in use!'] },
+    username: { type: String, unique: [true, 'Username already in use!'] },
     fname: { type: String, required: [true, 'First Name is required!'] },
     lname: { type: String, required: [true, 'Last Name is required!'] },
     email: { type: String, unique: [true, 'Email already in use!'] },
@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
 
     facebook: String,
     twitter: String,
-    google: String,
+    googleId: String,
     github: String,
     instagram: String,
     linkedin: String,
@@ -58,6 +58,16 @@ UserSchema.methods.comparePassword = function comparePassword(candidatePassword,
         cb(err, isMatch);
 });
 };
+
+
+/*
+Expose the find and modify method
+
+UserSchema.statics.findAndModify2 = function(query){
+    return this.collection.findAndModify({query: query, update: true, new: true, upsert: true, setDefaultsOnInsert: true});
+};
+
+*/
 
 /**
  * Helper method for getting user's gravatar.

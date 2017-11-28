@@ -9,6 +9,7 @@ var dinfo = require('debug')('austin-dase:info:');
 var expressValidator = require('express-validator');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var Google2Strategy = require('passport-google-oauth').OAuth2Strategy;
 //var FacebookStrategy = require('passport-facebook').Strategy;
 var flash = require('connect-flash');
 const bcrypt = require('bcrypt-nodejs');
@@ -74,8 +75,75 @@ passport.deserializeUser(function(user, done) {
     });
 });
 
+passport.use(new Google2Strategy({
+        clientID: process.env.GOOGLE_ID,
+        clientSecret: process.env.GOOGLE_SECRET,
+        callbackURL: "/auth/google/callback",
+        passReqToCallback: true
+    },
+    function(req, accessToken, refreshToken, profile, done) {
+        console.log("Google authentication: \n" + profile);
+        console.log(profile);
+        User.findOne({ google: profile.id }, function(err, existingUser) {
+            if (err) { return done(err); }
+            if (existingUser) {
+                return done(null, existingUser);
+            }
+            User.findOne({ email: profile.emails[0].value }, function(err, existingEmailUser) {
+                if (err) { return done(err); }
+                if (existingEmailUser) {
+                    req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Google manually from Account Settings.' });
+                    done(err);
+                } else {
+                    const user = new User();
+                    user.email = profile.emails[0].value;
+                    user.googleId = profile.id;
+                    user.fname = profile._json.name.givenName;
+                    user.lname = profile._json.name.familyName;
+                    user.tokens.push({ kind: 'google', token: accessToken });
+                    user.profile.fullName = profile._json.displayName;
+                    user.profile.gender = profile._json.gender;
+                    user.profile.picture = profile._json.image.url;
+                    user.profile.website = profile._json.url;
+                    user.save(function(err)  {
+                        done(err, user);
+                    });
+                }
+            });
+        });
+    }));
 
 
+/*        User.findOneAndUpdate(
+                {
+                    googleId: profile.id
+                },
+            { $set: { googleId: profile.id, } },
+            {new: true,
+                upsert: true,
+                setDefaultsOnInsert: true}
+            , function (err, user) {
+            return cb(err, user);
+        });*/
+// GET /auth/google
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  The first step in Google authentication will involve
+//   redirecting the user to google.com.  After authorization, Google
+//   will redirect the user back to this application at /auth/google/callback
+router.get('/google',
+    passport.authenticate('google',
+        { scope: ['https://www.googleapis.com/auth/plus.login','https://www.googleapis.com/auth/plus.profile.emails.read'] }));
+
+// GET /auth/google/callback
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+router.get('/google/callback',
+    passport.authenticate('google', {
+        successRedirect: '/profile/google',
+        failureRedirect: '/sign-in'
+    }));
 
 /**/
 /* base url = /auth */

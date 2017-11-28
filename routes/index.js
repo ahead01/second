@@ -26,5 +26,12 @@ router.get('/profile', authenticationMiddleware(), function(req, res, next) {
     res.render('user/profile', { title: 'Profile' });
 });
 
+/* GET home page. */
+router.get('/profile/google', authenticationMiddleware(), function(req, res, next) {
+    console.log(req.user);
+    console.log(req.isAuthenticated());
+    res.render('user/google-profile', { title: 'Google Profile' });
+});
+
 
 module.exports = router;
