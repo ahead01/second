@@ -2,3 +2,22 @@ extends ../layout
 block content
     include ../components/navbar
     h2 Profile
+    .jumbotron
+        .card.text-white.bg-primary
+            h3.card-header  Local User Profile: #{info.user.username}
+                .card-body
+                    img(style='height: 100px; width: 100px; display: block;', src= info.user.profile.picture, alt='Users Profile Picture')
+                    h5.card-title #{info.user.fname} #{info.user.lname}
+                .card-body
+                    p.card-text
+                        | Some quick example text to build on the card title and make up the bulk of the card&apos;s content.
+                    |
+                    a.card-link(href='/profile/remove') Remove Profile
+                    |
+                    a.card-link(href='/profile/update') Update Profile
+                |
+                .card-footer.text-muted
+                    .row
+                        | Last Updated: #{info.user.updatedAt}
+                    .row
+                        | Created On: #{info.user.createdAt}

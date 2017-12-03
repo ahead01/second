@@ -1,4 +1,4 @@
-nav.navbar.fixed-top.navbar-toggleable-md.navbar-light.bg-faded
+nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.navbar-light.bg-light
     button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarNavAltMarkup', aria-controls='navbarNavAltMarkup', aria-expanded='false', aria-label='Toggle navigation')
         span.navbar-toggler-icon
     a.navbar-brand(href='/')
@@ -11,6 +11,10 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-light.bg-faded
                 span.sr-only (current)
             if isAuthenticated
                 a.nav-item.nav-link(href='/auth/sign-out') Sign Out
+                a.nav-item.nav-link(href='/auth/profile') Profile
             else
                 a.nav-item.nav-link(href='/auth/sign-in') Sign In
-            a.nav-item.nav-link.disabled(href='#') Temp2
+            a.nav-item.nav-link(href='/tic-tac-toe') tic-tac-toe
+            a.nav-item.nav-link(href='/pizza-shop') pizza-shop
+            a.nav-item.nav-link(href='/about') About
+

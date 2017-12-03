@@ -17,8 +17,8 @@ const bcrypt = require('bcrypt-nodejs');
 function authenticationMiddleware () {
     return function(req, res, next) {
 
-        console.log('req.session.passport' + req.session.passport);
-        console.log('req.session' + req.session);
+        //console.log('req.session.passport' + req.session.passport);
+        //console.log('req.session' + req.session);
 
         if (req.isAuthenticated()) return next();
         res.redirect('auth/sign-in');
@@ -37,8 +37,8 @@ passport.deserializeUser(User.deserializeUser());
 
 passport.use(new LocalStrategy(
     function(username, password, done) {
-        console.log(username);
-        console.log(password);
+        //console.log(username);
+        //console.log(password);
         User.findOne({ username: username }, function (err, user) {
             if (err) { return done(err); }
             if (!user) {
@@ -48,15 +48,33 @@ passport.use(new LocalStrategy(
                     if (!user.password) {
                         return done(null, false, {message: 'Incorrect password.'});
                     }else{
-                        const hash = user.password.toString();
-                        console.log(hash);
-                        bcrypt.compare(password, hash, function (err, res) {
+                        //const hash = user.password.toString();
+                        // verify if the password is valid
+                        user.isPasswordValid(password, function(err, isValid) {
+                            // if any problems, error out
+                            if (err) {
+                                return done(err);
+                            }
+
+                            // only return the user if the password is valid
+                            if (isValid) {
+                               // console.log(user);
+                                //user.password = "";
+                                return done(null, user);
+                            } else {
+                                return done(null, false, {
+                                    message: "Invalid password"
+                                });
+                            }
+                        });
+/*                        bcrypt.compare(password, hash, function (err, res) {
                             if (res === true) {
+                                user.password = "";
                                 return done(null, user);
                             } else {
                                 return done(null, false, {message: 'Incorrect password.'});
                             }
-                        });
+                        });*/
                     }
                 }
         });
@@ -158,7 +176,15 @@ function debugErr(err, res, req){
 
 /* GET users listing. */
 router.get('/sign-in', function(req, res, next) {
+    if(req.message) {console.log(req.message);}
+    console.log(req);
     dget('/sign-in');
+    if(req.session.messages){
+        var errors = req.session.messages;
+        dinfo("Errors :" );
+        dinfo(errors);
+        return res.render('auth/sign-in', {title: 'Sign In', info:{errors: errors}});
+    }
   res.render('auth/sign-in', {title: 'Sign In', info:{}});
 });
 
@@ -172,12 +198,48 @@ router.get('/sign-out', authenticationMiddleware(), function(req, res) {
     });
 });
 
-router.post('/sign-in', passport.authenticate('local',
-                                                {
-                                                    successRedirect: '/profile',
-                                                    failureRedirect: '/auth/sign-in'
-                                                }
-                                            ));
+router.post('/sign-in', passport.authenticate('local',{
+    failureRedirect: '/auth/sign-in',
+    failureMessage: 'Login failed'
+}), function(req,res){
+    //res.redirect()
+    console.log("Logging in");
+    var NewUser = new User(req.body) ;
+    console.log(NewUser);
+    req.logIn(NewUser, function(err) {
+        if (err) {
+            console.log(err);
+            return res.render('auth/sign-up',
+                {
+                    title: 'Sign Up - Error',
+                    errors: err,
+                    user: NewUser
+                }
+            );
+        }
+        console.log("Successful authentication");
+        console.log(req.user);
+        User.findOne({ username: req.user.username }, function(err, user){
+            if(err){ return res.render('error');}
+            console.log(user);
+            req.user = user;
+            console.log(req.user);
+            console.log(req.isAuthenticated());
+            res.locals.isAuthenticated = req.isAuthenticated();
+            res.render('user/profile', {title: req.user.fname + '\'s Profile', info:{user: req.user}});
+        });
+
+        /*                res.render('auth/sign-in',
+                            {
+                                title: 'Sign In - Signed Up Successfully',
+                                info: {
+                                    email: NewUser.email,
+                                    userName: NewUser.userName
+                                }
+                            }
+                        );*/
+    });
+});
 /*router.post('/sign-in', function(req, res, next) {
     dpost('/sign-in');
     dinfo("New Usr: ");
@@ -235,12 +297,10 @@ console.log("Somethings wrong with passport authentiacte");
 router.post('/sign-up', function(req, res, next) {
     dpost('/sign-up');
     dreq(req.body);
-
-
-
     var email = req.body.email ;
+    var username = req.body.username;
     dinfo("Rendering sign-up page with: " + email);
-    res.render('auth/sign-up', { info : {email: email}, title: 'Sign Up'} );
+    res.render('auth/sign-up', { info : {email: email, username: username}, title: 'Sign Up'} );
 
 });
 
@@ -277,20 +337,20 @@ router.post('/sign-up/new', function(req, res, next) {
             return res.render('auth/sign-up',
                 {
                     title: 'Sign Up - Error',
-                    errors: err,
-                    user: NewUser
+                    errors: err.errors,
+                    info: {email: NewUser.email, username: NewUser.username}
                 }
             );
         }
         console.log("Saving");
         NewUser.save(function(err) {
             if (err) {
-                console.log(err);
+                dinfo(JSON.stringify(err));
                 return res.render('auth/sign-up',
                     {
                         title: 'Sign Up - Error',
-                        errors: err,
-                        user: NewUser
+                        errors: err.errors,
+                        info: {email: NewUser.email, username: NewUser.username}
                     }
                 );
             }
@@ -310,7 +370,7 @@ router.post('/sign-up/new', function(req, res, next) {
                 console.log(req.user);
                 console.log(req.isAuthenticated());
                 res.locals.isAuthenticated = req.isAuthenticated();
-                res.render('user/profile', {title: 'Profile', info:{}});
+                res.render('user/profile', {title: req.user.fname + '\'s Profile', info:{user: req.user}});
 /*                res.render('auth/sign-in',
                     {
                         title: 'Sign In - Signed Up Successfully',
@@ -372,6 +432,30 @@ router.post('/sign-up/new', function(req, res, next) {
 */
 });
 
+/* GET home page. */
+router.get('/profile', authenticationMiddleware(), function(req, res, next) {
+    console.log(" OPeing the profile now");
+    console.log(req.user[0]);
+    res.render('user/profile', { title: req.user[0].fname + '\'s Profile', info: {user: req.user[0]} });
+});
+/* GET remove profile. */
+router.get('/profile/remove', authenticationMiddleware(), function(req, res, next) {
+    console.log("Redirected");
+    console.log(req.user);
+    console.log(req.isAuthenticated());
+    //User.remove({ 'username' : 'test_user' });
+    User.find({ username : req.user.username }, function(err, user){
+        if(err){
+            return res.render('error',{errors: err});
+        }else{
+                console.log(user);
+                console.log('profile sucessfully removed');
+                return res.redirect('/auth/sign-out');
+        }
 
+    });
+    //res.redirect('/auth/profile/remove');
+    //res.render('user/google-profile', { title: 'Google Profile' });
+});
 
 module.exports = router;

@@ -1,0 +1,371 @@
+doctype html
+html
+    head
+        script(src='https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js')
+        //link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+        link(rel='stylesheet', href='/stylesheets/bootswatch.css')
+        script(type="text/javascript", src="/javascripts/jquery-3.2.1.min.js")
+        script(type="text/javascript", src="/javascripts/bootstrap.min.js")
+        script(src="https://apis.google.com/js/platform.js", async="", defer="")
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        title Tic Tac Toe
+        |
+        script(src='http://code.jquery.com/jquery-latest.js')
+        |
+        style.
+            .boardBtn { height: 100px; width: 100px }
+            .winner {
+                background-color: red;
+            }
+            button {
+                height: 30px;
+                width: 30px;
+            }
+        |
+        script.
+            $(document).ready(function () {
+                $("#boardSize").focus();
+                //$("#boardSize").focusin(function() {
+                $("#boardSize").on('keypress', function(e) {
+                    //alert("E");
+                    if(e.keyCode === 13){
+                        $("#btnBuildBoard").click();
+                    }
+                })
+                //});
+                //Your Javascript code goes here.
+                // global variables
+                var count = 0;
+                var size = 0;
+                var my_size = 0;
+                var one = "";
+                var two =  "";
+                var three = "";
+                var four = "";
+                var center = "";
+                var corners = [];
+                $("#btnNewGame").click(function() {
+                    location.reload();
+                });
+                //on build board click, build board
+                $("#btnBuildBoard").click(function(){
+                    //$("#btnNewGame").attr("disabled","false");
+                    size = $("#boardSize").val();
+                    my_size = size - 1;
+                    one = "00";
+                    two = "0" + my_size;
+                    three = my_size + "0";
+                    four = my_size + "" + my_size;
+                    if(size % 2 === 0){
+                        var x = size/2;
+                    }else{
+                        var x = (size-1)/2;
+                    }
+                    center = x + "" + x;
+                    corners = [one, two, three, four];
+                    var html_str = "";
+                    var html_row = "";
+                    for(var x = 0; x < size; x++){
+                        html_str += "<tr>" ;
+                        for(var y = 0; y < size; y++){
+                            html_row +=  "<td><button value=1 id=\""+ x +""+ y+"\">"+"_"+"</button></td>" ;
+                        }
+                        html_str += html_row + "</tr>";
+                        html_row = "";
+                    }
+                    // $("#tttBoard").html(html_str);
+                    //on button click, start work
+                    var active_btn_html = $(html_str).find('button').click(function () {
+                        //alert("CLICK");
+                        var win = "none";
+                        count++
+                        var spot = $(this).attr("id");
+                        move(spot);
+                        if((count % 2) === 0 ){
+                            $(this).html("0");
+                        }else{
+                            $(this).html("x");
+                        }
+                        win = check_win2("0");
+                        if(win === "win"){
+                            //alert("O Won!");
+                        }
+                        count++
+                        //alert("COM_P");
+                        var from = computer_move2(spot);
+                        //$("#from").html("<h2>Computer Moved From"+from+"</h2>");
+                        win = check_win2("0");
+                        if(win === "win"){
+                            //alert("O Won!");
+                        }
+                    }).end();
+                    $("#tttBoard").html(active_btn_html);
+                    //$("#22").html("test");
+                    // });
+                });
+                //computer logic
+                function computer_move2(userMove) {
+                    var spot = check_win2("1");
+                    //alert("spot is: "+ spot);
+                    if(spot !== "none"){
+                        move(spot);
+                        return("one_away : " + spot);
+                    }else{
+                        spot = check_corner("none");
+                        if(spot !== "none"){
+                            move(spot);
+                            return("corner : " + spot);
+                        }else{
+                            spot = go_center();
+                            if(spot !== "none"){
+                                move(center);
+                                return(" Moved from center : " + center);
+                            }
+                            spot = next_to_me();
+                            if(spot !== "none"){
+                                move(spot);
+                                return("next_to_me : " + spot);
+                            }else{
+                                spot = random_spot();
+                                move(spot);
+                                return("random : " + spot);
+                            }
+                        }
+                    }
+                };
+                function go_center(userMove){
+                    if($("#" + center).val() === "1"){
+                        return(center);
+                    }else{
+                        check_corner(userMove);
+                        return("none");
+                    }
+                }
+                function check_corner(val){
+                    for(var i=0;i<corners.length;i++){
+                        if($("#"  + corners[i]).val() === "1"){
+                            return(corners[i]);
+                        }else{
+                            if($("#"  + val) === corners[i]){
+                                var temp = go_center();
+                                if(temp !== "none"){
+                                    return(temp);
+                                }
+                            }
+                        }
+                    }
+                    return("none");
+                }
+                function random_spot(){
+                    return ($("[value=1]").attr("id") );
+                }
+                function next_to_me(){
+                    //id of one next to a OO
+                    //return ($("[value=OO]").attr("id"));
+                    //var me_str = [];
+                    //me_str = $("button").getAll.attr("id");
+                    //.me_str.push(this.attr("id"));
+                    //.attr("id").toString.forEach;
+                    // .forEach
+                    //var you = $("[value=XX]").attr("id");
+                    //var free = $("[value=1]").attr("id");
+                    //var me_str = me;
+                    // var you_str = you;
+                    //var free_str = free;
+                    // var count = 0;
+                    // $("#me").html(me_str);
+                    // me.forEach(
+                    //  count++;
+                    //   me_str += me[count];
+                    //));
+                    //$("#you").html(you);
+                    // $("#free").html(free);
+                    // me.forEach(function() {$("#" + this.attr("id"))})
+                    return("none");
+                }
+                //check for a win
+                function check_win2(almost_win){
+                    //if almost win = 1 then return index, otherwise check for a win
+                    //if()
+                    //globals
+                    var string_v = "";
+                    var c_missing = "none";
+                    var p_winners = [];
+                    var rv = "none";
+                    //row
+                    for(var x = 0; x < size; x++){
+                        string_v = "";
+                        for(var y = 0; y < size; y++){
+                            var cv = $("#"+x+""+y).val();
+                            string_v += cv;
+                            if(cv === "1"){
+                                c_missing = $("#"+x+""+y).attr("id");
+                                //alert("Made it");
+                            }else{
+                                p_winners.push($("#"+x+""+y));
+                            }
+                        }
+                        check();
+                        if(rv !== "none"){
+                            return(rv);
+                        }
+                    }
+                    //col
+                    for(var y = 0; y < size; y++){
+                        string_v = "";
+                        for(var x = 0; x < size; x++){
+                            var cv = $("#"+x+""+y).val();
+                            string_v += cv;
+                            if(cv === "1"){
+                                c_missing = $("#"+x+""+y).attr("id");
+                            }else{
+                                p_winners.push($("#"+x+""+y));
+                            }
+                        }
+                        check();
+                        if(rv !== "none"){
+                            return(rv);
+                        }
+                    }
+                    //diag_1
+                    for(var x = 0; x < size; x++){
+                        var cv = $("#"+x+""+x).val();
+                        string_v += cv;
+                        if(cv === "1"){
+                            c_missing = $("#"+x+""+x).attr("id");
+                        }else{
+                            p_winners.push($("#"+x+""+x));
+                        }
+                    }
+                    check();
+                    if(rv !=="none"){
+                        return(rv);
+                    }
+                    //diaag_2
+                    for(var x = 0; x < size; x++){
+                        var y = (size - 1) - x;
+                        var cv = $("#"+x+""+y).val();
+                        string_v += cv;
+                        if(cv === "1"){
+                            c_missing = $("#"+x+""+y).attr("id");
+                        }else{
+                            p_winners.push($("#"+x+""+y));
+                        }
+                    }
+                    check();
+                    if(rv !=="none"){
+                        return(rv);
+                    }
+                    //check win indicators
+                    function check(){
+                        if(almost_win === "1"){
+                            //alert("cm: " + c_missing);
+                            rv = check_a();
+                            //alert("rv: "+rv + "ca : " + check_a());
+                        }else{
+                            rv = check_w();
+                        }
+                        //alert("rv :" + rv);
+                        string_v = "";
+                        p_winners = [];
+                    }
+                    function check_a(){
+                        if(string_v.length === ((size * 3) -2)){
+                            //O is one away
+                            var winner = new RegExp("X");
+                            var win = winner.test(string_v);
+                            if(p_winners[0].val() === "OOO" && !win){
+                                //O is really 1 away
+                                //alert("O 1 away");
+                                return(c_missing);
+                            }
+                        }
+                        if(string_v.length === ((size * 2) -1)){
+                            //X is 1 away
+                            var winner = new RegExp("O");
+                            var win = winner.test(string_v);
+                            if(p_winners[0].val() === "XX" && !win){
+                                //X is really 1 away
+                                //alert("X 1 away" + c_missing);
+                                return(c_missing);
+                            }
+                        }
+                        return("none");
+                    }
+                    function check_w(){
+                        // alert("check_w")
+                        if(string_v.length === (size * 3)){
+                            //O is win
+                            //alert("check_w-1");
+                            var winner = new RegExp("X");
+                            var win = winner.test(string_v);
+                            if(p_winners[0].val() === "OOO" && !win){
+                                //O is really win
+                                alert("O win");
+                                for(var c = 0; c < p_winners.length; c++){
+                                    p_winners[c].addClass("winner");
+                                }
+                                return("win");
+                            }
+                        }
+                        if(string_v.length === (size * 2) ){
+                            //X is win
+                            //alert("check_w-3")
+                            var winner = new RegExp("O");
+                            var win = winner.test(string_v);
+                            if(p_winners[0].val() === "XX" && !win){
+                                //X is really win
+                                alert("x win");
+                                for(var c = 0; c < p_winners.length; c++){
+                                    p_winners[c].addClass("winner");
+                                }
+                                return("win");
+                            }
+                        }
+                        //alert("check_w-5");
+                        return ("none");
+                    }
+                    //possible return codes
+                    //one_away
+                    //index of element that is the open space
+                    //none
+                    //win
+                    //win
+                    //none
+                    //alert(rv);
+                    return (rv);
+                }
+                //computer logic
+                //computer_move
+                //check for an almost win
+                //
+                //move
+                function move (id){
+                    //alert("MOVE");
+                    if((count % 2) === 0 ){
+                        $("#"+id).html("O");
+                        $("#"+id).val("OOO");
+                    }else{
+                        $("#" +id).html("X");
+                        $("#"+id).val("XX");
+                    }
+                    //alert($("#"+id).val() + " : " +id);
+                    //$("#comp_move").html("<h3>Computer went to: "+id+"</h3>");
+                };
+            });
+    body
+        include ../components/navbar
+        #tttBoard
+        |
+        input#btnBuildBoard(type='button', value='Build Board')
+        input#boardSize(type='text', value='')
+        |
+        input#btnNewGame(type='button', value='New Game')
+        |
+        #from
+        |
+        #me
+        |
+        #you
+        |
+        #free

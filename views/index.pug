@@ -1,21 +1,26 @@
 extends layout
 block content
-  include components/navbar
-  section.jumbotron.text-center(style="height: 592px;background-image:url(images/home-bgrd_v-2.jpg); background-repeat: no-repeat ;background-position: 50% 50% ;background-size: 100% ;background-color: transparent ;background-size: cover;" +
-  "font-family: \"Patua One\" !important; letter-spacing: 5px !important;")
-      .wsite-section-content
-          .container.pt-4
-              .banner
-                  .wsite-section-elements
-                      span
-                      h2.banner-wrap(style='text-align:center; color: white;  font-size: 55px !important; font-weight: 400;')= title
-                      div(style='text-align:center; color: white; font-weight: 400; font-size: 20px')
-                          //p.text-center.banner | Welcome to my site. Please sign in.
-                      div(style='text-align:center;')
-                          div(style='height: 7%; overflow: hidden;')
-                          a.wsite-button.wsite-button-small(href='/auth/sign-in')
-                              span.wsite-button-inner(style="background-color: #c1a367; -webkit-text-fill-color: white;") Sign In
-                          div(style='height: 7%; overflow: hidden;')
+    include components/navbar
+    section.jumbotron.text-center(style="height: 592px;background-image:url(images/home-bgrd_v-2.jpg); background-repeat: no-repeat ;background-position: 50% 50% ;background-size: 100% ;background-color: transparent ;background-size: cover;" +
+    "font-family: \"Patua One\" !important; letter-spacing: 5px !important;")
+        .wsite-section-content
+            .container.pt-4
+                .banner
+                    .wsite-section-elements
+                        span
+                        h2.banner-wrap(style='text-align:center; color: white;  font-size: 55px !important; font-weight: 400;')= title
+                        div(style='text-align:center; color: white; font-weight: 400; font-size: 20px')
+                            //p.text-center.banner | Welcome to my site. Please sign in.
+                        div(style='text-align:center;')
+                            div(style='height: 3%; overflow: hidden;')
+                                if isAuthenticated
+                                    a.btn(href='auth/profile')
+                                        span.wsite-button-inner(style=" -webkit-text-fill-color: white;font-weight: 900;font-size: larger;") Profile
+                                else
+                                    a.btn(href='/auth/sign-in')
+                                        span.wsite-button-inner(style=" -webkit-text-fill-color: white;font-weight: 900;font-size: larger;") Sign In
+                            div(style='height: 7%; overflow: hidden;')
+
 
 
 

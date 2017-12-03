@@ -1,6 +1,10 @@
 extends ../layout
+
 block content
+    //include ../includes/css/core
+    //include ../includes/css/custom
     include ../components/navbar
+
     .container
         .row
             .col-md-3
@@ -9,12 +13,12 @@ block content
                         each prob, index in errors
                             .row.pt-1
                                 .alert.alert-danger
-                                    label= index
                                     label= prob
 
 
+
             .col-md-6
-                .card.text-white.p-5.bg-info
+                .card.card-register.mx-auto.mt-5
                     .card-body
                         h1.mb-4.text-center Signup
                         form#SignUpForm(action='/auth/sign-up/new', method='post')
@@ -23,22 +27,22 @@ block content
                                     .m-2
                                         label(for='fname') First Name
                                         input#fname.form-control(type='text', placeholder='First Name', name='fname',
-                                        value='test_fname')
+                                        value='test_fname', required='')
                                         label(for='lname') Last Name
                                         input#lname.form-control(type='text', placeholder='Last Name', name='lname',
-                                        value='test_lname')
+                                        value='test_lname', required='')
                             .form-group
                                 label Username
                                 input.form-control(type='text', placeholder='Username', name='username',
-                                value='test_user')
+                                value= undefined === info ? 'test_user' : info.username, required='')
                             .form-group
                                 label Email address
                                 input.form-control(type='email', placeholder='Enter email', name='email',
-                                value= undefined === info ? 'test_email@gmail.com' : info.email)
+                                value= undefined === info ? 'test_email@gmail.com' : info.email, required='')
                             .form-group
                                 label Password
                                 input.form-control(type='password', placeholder='Password', name='password',
-                                value='test_pass')
+                                value='test_pass', required='')
 
                             .form-group
                                 .row
