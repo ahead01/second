@@ -11,6 +11,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var Google2Strategy = require('passport-google-oauth').OAuth2Strategy;
 //var FacebookStrategy = require('passport-facebook').Strategy;
+var TwitterStrategy = require('passport-twitter').Strategy;
 var flash = require('connect-flash');
 const bcrypt = require('bcrypt-nodejs');
 
@@ -23,6 +24,21 @@ function authenticationMiddleware () {
         if (req.isAuthenticated()) return next();
         res.redirect('auth/sign-in');
     }
+
+}
+function authenticationMiddlewareOpposite () {
+    return function(req, res, next) {
+
+        //console.log('req.session.passport' + req.session.passport);
+        //console.log('req.session' + req.session);
+
+        if (req.isAuthenticated()) {
+            res.redirect('/');
+        }
+        return next();
+
+    }
+
 }
 /* passport config
 *
@@ -37,8 +53,6 @@ passport.deserializeUser(User.deserializeUser());
 
 passport.use(new LocalStrategy(
     function(username, password, done) {
-        //console.log(username);
-        //console.log(password);
         User.findOne({ username: username }, function (err, user) {
             if (err) { return done(err); }
             if (!user) {
@@ -48,23 +62,15 @@ passport.use(new LocalStrategy(
                     if (!user.password) {
                         return done(null, false, {message: 'Incorrect password.'});
                     }else{
-                        //const hash = user.password.toString();
                         // verify if the password is valid
                         user.isPasswordValid(password, function(err, isValid) {
                             // if any problems, error out
-                            if (err) {
-                                return done(err);
-                            }
-
+                            if (err) { return done(err); }
                             // only return the user if the password is valid
                             if (isValid) {
-                               // console.log(user);
-                                //user.password = "";
                                 return done(null, user);
                             } else {
-                                return done(null, false, {
-                                    message: "Invalid password"
-                                });
+                                return done(null, false, { message: "Invalid password" });
                             }
                         });
 /*                        bcrypt.compare(password, hash, function (err, res) {
@@ -130,7 +136,91 @@ passport.use(new Google2Strategy({
             });
         });
     }));
+/*
+var GoogleAuth = require('google-auth-library');
+var auth = new GoogleAuth;
+var client = new auth.OAuth2(CLIENT_ID, '', '');
+client.verifyIdToken(
+    token,
+    CLIENT_ID,
+    // Or, if multiple clients access the backend:
+    //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3],
+    function(e, login) {
+        var payload = login.getPayload();
+        var userid = payload['sub'];
+        // If request specified a G Suite domain:
+        //var domain = payload['hd'];
+    });
 
+*/
+
+
+
+passport.use(new TwitterStrategy({
+        consumerKey: process.env.TWITTER_KEY,
+        consumerSecret: process.env.TWITTER_SECRET,
+        callbackURL: "http://127.0.0.1:"+ process.env.PORT +"/auth/twitter/callback"
+    },
+    function(token, tokenSecret, profile, cb) {
+        User.findOne({ twitter: profile.id }, function(err, existingUser) {
+            if (err) { return done(err); }
+            if (existingUser) {
+                return cb(null, existingUser);
+            }
+            console.log(profile);
+            const user = new User();
+            user.twitterHandel = profile.username;
+            user.twitter = profile.id;
+            user.username = profile.username;
+            //user.profile.picture = profile.photos[0].value;
+            user.fname = profile._json.name;
+            user.lname = profile._json.screen_name;
+            user.tokens.push({ kind: 'twitter', token: token });
+            user.profile.fullName = profile._json.name;
+            //user.profile.gender = profile._json.gender;
+            user.profile.picture = profile._json.profile_image_url;
+            //user.profile.website = profile._json.url;
+            user.save(function(err)  {
+                cb(err, user);
+            });
+
+            /* User.findOne({ email: profile.emails[0].value }, function(err, existingEmailUser) {
+                 if (err) { return done(err); }
+                 if (existingEmailUser) {
+                     req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Google manually from Account Settings.' });
+                     done(err);
+                 } else {
+                     console.log(profile);
+                     const user = new User();
+                     user.email = profile.emails[0].value;
+                     user.twitter = profile.id;
+                     user.fname = profile._json.name.givenName;
+                     user.lname = profile._json.name.familyName;
+                     user.tokens.push({ kind: 'twitter', token: accessToken });
+                     user.profile.fullName = profile._json.displayName;
+                     user.profile.gender = profile._json.gender;
+                     user.profile.picture = profile._json.image.url;
+                     user.profile.website = profile._json.url;
+                     user.save(function(err)  {
+                         done(err, user);
+                     });
+                 }
+             });*/
+        });
+/*        User.findOrCreate({ twitterId: profile.id }, function (err, user) {
+            return cb(err, user);
+        });*/
+    }
+));
+
+router.get('/twitter', passport.authenticate('twitter'));
+
+router.get('/twitter/callback',
+    passport.authenticate('twitter', { failureRedirect: '/sign-in' }),
+    function(req, res) {
+        // Successful authentication, redirect home.
+        res.render('user/profile', {title: req.user.fname + '\'s Profile', info:{user: req.user}});
+    });
 
 /*        User.findOneAndUpdate(
                 {
@@ -152,6 +242,10 @@ router.get('/google',
     passport.authenticate('google',
         { scope: ['https://www.googleapis.com/auth/plus.login','https://www.googleapis.com/auth/plus.profile.emails.read'] }));
 
+router.post('/google',
+    passport.authenticate('google',
+        { scope: ['https://www.googleapis.com/auth/plus.login','https://www.googleapis.com/auth/plus.profile.emails.read'] }));
+
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request.  If authentication fails, the user will be redirected back to the
@@ -162,6 +256,7 @@ router.get('/google/callback',
         successRedirect: '/profile/google',
         failureRedirect: '/sign-in'
     }));
+
 
 /**/
 /* base url = /auth */
@@ -175,7 +270,7 @@ function debugErr(err, res, req){
 };
 
 /* GET users listing. */
-router.get('/sign-in', function(req, res, next) {
+router.get('/sign-in', authenticationMiddlewareOpposite(), function(req, res, next) {
     if(req.message) {console.log(req.message);}
     console.log(req);
     dget('/sign-in');

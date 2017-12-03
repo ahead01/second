@@ -3,7 +3,7 @@ block content
     include ../components/navbar
     .container
         .row
-            .col-md-3
+            .col-sm-3
                 if info
                     if info.errors
                         div.alert.alert-info Error sigining in. Please try again or Sign up.
@@ -11,7 +11,7 @@ block content
                                 .row.pt-1
                                     .alert.alert-danger
                                         label= prob
-            .col-md-6
+            .col-sm-6
                 .cardcard-register.mx-auto.mt-5
                     .card-body
                         h1.mb-4.text-center Signin or Signup
@@ -32,10 +32,20 @@ block content
                                 .row
                                     button.btn.btn-secondary.col.m-2(type='submit', OnClick='SetSignIn()') Login
                                     button.btn.btn-secondary.col.m-2(type='submit', OnClick='SetSignUp()') Sign Up
-                        .container.align-self-center.align-items-center
-                            a(href="/auth/google" class="btn btn-danger")
-                                span.fa.fa-google-plus
-                                | Sign In With Google
+            .col-sm-3
+                .row.h-25
+                    span
+                .row
+                    .cardcard-register.mx-auto.mt-5
+                        .card-body
+                            a.btn.btn-block.btn-google.btn-info.p-2(href='/auth/google')
+                                img.h-100.w-100.p-0.m-0.border-0(src="/images/google_signin_buttons/web/1x/btn_google_signin_light_normal_web.png")
+                            a.btn.btn-block.btn-twitter.btn-info.p-2(href='/auth/twitter')
+                                img.h-100.w-100.p-0(src="/images/sign-in-with-twitter-gray.png")
+                            a.btn.btn-block.btn-github.btn-info(href='/auth/github')
+                                i.fa.fa-github
+                                | Sign in with GitHub
+
 
                         script.
                             function SetSignUp() {
@@ -45,3 +55,10 @@ block content
                                 $("#authForm").attr("action", '/auth/sign-in');
                                 console.log("SIgning in");
                             };
+                            /* function onSignIn(googleUser) {
+                                var profile = googleUser.getBasicProfile();
+                                var id_token = googleUser.getAuthResponse().id_token;
+                                xhttp.open('POST', '/auth/twitter/tokensignin', true);
+                                xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                xhttp.send('idtoken=' + id_token);
+                            }*/

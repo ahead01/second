@@ -10,11 +10,20 @@ nav.navbar.fixed-top.navbar-toggleable-md.navbar-expand-lg.navbar-light.bg-light
                 | Home
                 span.sr-only (current)
             if isAuthenticated
-                a.nav-item.nav-link(href='/auth/sign-out') Sign Out
+                a.nav-item.nav-link#signout(href='/auth/sign-out') Sign Out
                 a.nav-item.nav-link(href='/auth/profile') Profile
             else
                 a.nav-item.nav-link(href='/auth/sign-in') Sign In
             a.nav-item.nav-link(href='/tic-tac-toe') tic-tac-toe
             a.nav-item.nav-link(href='/pizza-shop') pizza-shop
             a.nav-item.nav-link(href='/about') About
+
+            script.
+                $('#signout').click(function()  {
+                    var auth2 = gapi.auth2.getAuthInstance();
+                    auth2.signOut().then(function () {
+                        console.log('User signed out from google.');
+                    });
+                })
+
 
