@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const db_conn = require('../db');
+const db_conn = require('../models/db');
 const User = require('../models/user-model');
 var dpost = require('debug')('austin-dase:POST:');
 var dget = require('debug')('austin-dase:GET:');
@@ -21,8 +21,11 @@ function authenticationMiddleware () {
         //console.log('req.session.passport' + req.session.passport);
         //console.log('req.session' + req.session);
 
-        if (req.isAuthenticated()) return next();
-        res.redirect('auth/sign-in');
+        if (req.isAuthenticated()){
+            res.locals.user = req.user || null;
+            return next();
+        }
+        res.redirect('/auth/sign-in');
     }
 
 }
@@ -106,19 +109,30 @@ passport.use(new Google2Strategy({
         passReqToCallback: true
     },
     function(req, accessToken, refreshToken, profile, done) {
-        console.log("Google authentication: \n" + profile);
-        console.log(profile);
-        User.findOne({ google: profile.id }, function(err, existingUser) {
-            if (err) { return done(err); }
+        console.log("Google authentication: ");
+        console.log(JSON.stringify(profile));
+        //JSON.stringify(profile._json);
+        var json = profile.toString();
+        //JSON.parse(json);
+
+        //console.log(profile);
+        //authenticationMiddleware();
+        User.findOne({ googleId: profile.id }, function(err, existingUser) {
+            if (err) {
+                console.log("errro");
+                return done(err); }
             if (existingUser) {
+                console.log("existing user");
                 return done(null, existingUser);
             }
+            console.log("Google authentication: 2");
+            console.log(profile);
             User.findOne({ email: profile.emails[0].value }, function(err, existingEmailUser) {
                 if (err) { return done(err); }
                 if (existingEmailUser) {
-                    req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Google manually from Account Settings.' });
-                    done(err);
+                    done(null, existingEmailUser);
                 } else {
+                    console.log("Google authentication: 3 ");
                     const user = new User();
                     user.email = profile.emails[0].value;
                     user.googleId = profile.id;
@@ -159,7 +173,8 @@ client.verifyIdToken(
 passport.use(new TwitterStrategy({
         consumerKey: process.env.TWITTER_KEY,
         consumerSecret: process.env.TWITTER_SECRET,
-        callbackURL: "http://127.0.0.1:"+ process.env.PORT +"/auth/twitter/callback"
+        callbackURL: "http://localhost:"+ process.env.PORT +"/auth/twitter/callback"
+        //callbackURL: "http://127.0.0.1:"+ process.env.PORT +"/auth/twitter/callback"
     },
     function(token, tokenSecret, profile, cb) {
         User.findOne({ twitter: profile.id }, function(err, existingUser) {
@@ -218,6 +233,8 @@ router.get('/twitter', passport.authenticate('twitter'));
 router.get('/twitter/callback',
     passport.authenticate('twitter', { failureRedirect: '/sign-in' }),
     function(req, res) {
+    console.log(req.user);
+        res.locals.user = req.user || null;
         // Successful authentication, redirect home.
         res.render('user/profile', {title: req.user.fname + '\'s Profile', info:{user: req.user}});
     });
@@ -242,9 +259,9 @@ router.get('/google',
     passport.authenticate('google',
         { scope: ['https://www.googleapis.com/auth/plus.login','https://www.googleapis.com/auth/plus.profile.emails.read'] }));
 
-router.post('/google',
+/*router.post('/google',
     passport.authenticate('google',
-        { scope: ['https://www.googleapis.com/auth/plus.login','https://www.googleapis.com/auth/plus.profile.emails.read'] }));
+        { scope: ['https://www.googleapis.com/auth/plus.login','https://www.googleapis.com/auth/plus.profile.emails.read'] }));*/
 
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -253,8 +270,8 @@ router.post('/google',
 //   which, in this example, will redirect the user to the home page.
 router.get('/google/callback',
     passport.authenticate('google', {
-        successRedirect: '/profile/google',
-        failureRedirect: '/sign-in'
+        successRedirect: '/auth/profile',
+        failureRedirect: '/auth/sign-in'
     }));
 
 
@@ -272,7 +289,7 @@ function debugErr(err, res, req){
 /* GET users listing. */
 router.get('/sign-in', authenticationMiddlewareOpposite(), function(req, res, next) {
     if(req.message) {console.log(req.message);}
-    console.log(req);
+    //console.log(req);
     dget('/sign-in');
     if(req.session.messages){
         var errors = req.session.messages;
@@ -530,7 +547,11 @@ router.post('/sign-up/new', function(req, res, next) {
 /* GET home page. */
 router.get('/profile', authenticationMiddleware(), function(req, res, next) {
     console.log(" OPeing the profile now");
-    console.log(req.user[0]);
+
+    if(req.user[0]){
+        console.log(req.user[0]);
+        res.locals.user = req.user[0] || null;
+    }
     res.render('user/profile', { title: req.user[0].fname + '\'s Profile', info: {user: req.user[0]} });
 });
 /* GET remove profile. */

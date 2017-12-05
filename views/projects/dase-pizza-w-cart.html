@@ -1,593 +1,575 @@
 <!DOCTYPE html>
 <html id="html">
-<nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg navbar-light bg-light">
-    <meta charset="utf-8"><script async="" src="//www.google-analytics.com/analytics.js"></script><script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script><!--link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')--><link rel="stylesheet" href="/stylesheets/bootswatch.css"><script type="text/javascript" src="/javascripts/jquery-3.2.1.min.js"></script><script type="text/javascript" src="/javascripts/bootstrap.min.js"></script><script src="https://apis.google.com/js/platform.js" async="" defer="" gapi_processed="true"></script><link rel="stylesheet" href="/stylesheets/style.css"><meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><a class="navbar-brand" href="/"><!--img(src="../images/monogram.png").img-logo-sm-->Austin Dase</a><div class="collapse navbar-collapse" id="navbarNavAltMarkup"><div class="navbar-nav"><a class="nav-item nav-link active" href="/">Home<span class="sr-only">(current)</span></a><a class="nav-item nav-link" href="/auth/sign-in">Sign In</a><a class="nav-item nav-link" href="/tic-tac-toe">tic-tac-toe</a><a class="nav-item nav-link" href="/pizza-shop">pizza-shop</a></div></div></nav>
 <head>
-<title>Your Name Pizza Shop</title>
-<!-----------------------------ABOUT DASE PIZZA----------------------->
-<!--Author - Austin Dase
-Menupage working
-Sample JSON objects are hardcoded into the script
-The cart is working
-The Cart summary page is working
-The build your own pizza page is in progress
-The action to hide the cart when you click away isnt update yet
-Some of the page hiding/showing needs to be tweaked
+    <title>Your Name Pizza Shop</title>
+    <!-----------------------------ABOUT DASE PIZZA----------------------->
+    <!--Author - Austin Dase
+    Menupage working
+    Sample JSON objects are hardcoded into the script
+    The cart is working
+    The Cart summary page is working
+    The build your own pizza page is in progress
+    The action to hide the cart when you click away isnt update yet
+    Some of the page hiding/showing needs to be tweaked
 -->
-<!-----------------------------JQUERY AREA----------------------->
-<!--CDN Content Delivery Network-->
-<!--Load the jquery minified version: no comments, no whitespace, streamed-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!--Get Locally from our Server-->
-<!-----------------------------JSON DATA AREA----------------------->
-<script>
-var pizzasJSON = {
-"pizza": {"Meat":{
-"name": "Meat",
-"price": {
-"small": 1.95,
-"medium": 2.95,
-"large": 3.95
-},
-"desc": "This is a smaple description of a Meat-Pizza it will include the crust, sauce and toppings",
-"url": null
-},
-"Cheese":{
-"name": "Cheese",
-"price": {
-"small": 2.95,
-"medium": 3.95,
-"large": 4.95
-},
-"desc": "This is a smaple description of a Cheese pizza, it will include the crust, sauce and toppings",
-"url": null
-},        "Margharita":{
-"name": "Margharita",
-"price": {
-"small": 3.95,
-"medium": 4.95,
-"large": 5.95
-},
-"desc": "This is a smaple description of a Margharita pizza, it will include the crust, sauce and toppings",
-"url": null
-},        "White":{
-"name": "White",
-"price": {
-"small": 3.95,
-"medium": 4.95,
-"large": 5.95
-},
-"desc": "This is a smaple description of a White Pizza it will include the crust, sauce and toppings",
-"url": null
-},        "Veggie":{
-"name": "Veggie",
-"price": {
-"small": 2.95,
-"medium": 3.95,
-"large": 4.95
-},
-"desc": "This is a smaple description of a Veggie pizza, it will include the crust, sauce and toppings",
-"url": null
-},        "Hawaiian":{
-"name": "Hawaiian",
-"price": {
-"small": 2.95,
-"medium": 3.95,
-"large": 4.95
-},
-"desc": "This is a smaple description of a Hawaiian pizza, it will include the crust, sauce and toppings",
-"url": null
-}
-}
-
+    <!-----------------------------JQUERY AREA----------------------->
+    <!--CDN Content Delivery Network-->
+    <!--Load the jquery minified version: no comments, no whitespace, streamed-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--Get Locally from our Server-->
+    <!-----------------------------JSON DATA AREA----------------------->
+    <script>
+     var pizzasJSON = {
+	"pizza": {"Meat":{
+			"name": "Meat",
+			"price": {
+				"small": 1.95,
+				"medium": 2.95,
+				"large": 3.95
+			},
+			"desc": "This is a smaple description of a Meat-Pizza it will include the crust, sauce and toppings",
+			"url": null
+		},
+		"Cheese":{
+			"name": "Cheese",
+			"price": {
+				"small": 2.95,
+				"medium": 3.95,
+				"large": 4.95
+			},
+			"desc": "This is a smaple description of a Cheese pizza, it will include the crust, sauce and toppings",
+			"url": null
+		},		"Margharita":{
+			"name": "Margharita",
+			"price": {
+				"small": 3.95,
+				"medium": 4.95,
+				"large": 5.95
+			},
+			"desc": "This is a smaple description of a Margharita pizza, it will include the crust, sauce and toppings",
+			"url": null
+		},		"White":{
+			"name": "White",
+			"price": {
+				"small": 3.95,
+				"medium": 4.95,
+				"large": 5.95
+			},
+			"desc": "This is a smaple description of a White Pizza it will include the crust, sauce and toppings",
+			"url": null
+		},		"Veggie":{
+			"name": "Veggie",
+			"price": {
+				"small": 2.95,
+				"medium": 3.95,
+				"large": 4.95
+			},
+			"desc": "This is a smaple description of a Veggie pizza, it will include the crust, sauce and toppings",
+			"url": null
+		},		"Hawaiian":{
+			"name": "Hawaiian",
+			"price": {
+				"small": 2.95,
+				"medium": 3.95,
+				"large": 4.95
+			},
+			"desc": "This is a smaple description of a Hawaiian pizza, it will include the crust, sauce and toppings",
+			"url": null
+		}
+              }
+	
 };
-</script>
-<!-----------------------------META DATA AREA----------------------->
-<!--Meta tags can provide search engines with information about the site-->
-<!--Metadata is always passed as name/value pairs.-->
-<meta charset="utf-8" />
-<meta name="description" content="Pizza Shop">
-<meta name="keywords" content="Pizza, ">
-<!-----------------------------CSS STYLE RULES AREA------------------>
-<!--This is an external style sheet reference-->
-<!-- <link rel="stylesheet" type="text/css" href="styles/common.css" /> ------->
-<!--This is an internal/embedded style sheet rule -->
+    </script>
+    <!-----------------------------META DATA AREA----------------------->
+    <!--Meta tags can provide search engines with information about the site-->
+    <!--Metadata is always passed as name/value pairs.-->
+    <meta charset="utf-8" />
+    <meta name="description" content="Pizza Shop">
+    <meta name="keywords" content="Pizza, ">
+    <!-----------------------------CSS STYLE RULES AREA------------------>
+    <!--This is an external style sheet reference-->
+    <!-- <link rel="stylesheet" type="text/css" href="styles/common.css" /> ------->
+    <!--This is an internal/embedded style sheet rule -->
 
-
-<style type="text/css">
-/*Build your own section style */
-    .byo {
-        text-align: center;
-}
-/* CART STYLE */
-.cart {
-background-color:black;
-border-radius: 8px;
-    outline-color: black;
-    outline-style: solid;
-    outline-width: thin;
-    border-color: black;
-    border-width: thin;
-    table-layout: fixed;
-    width: 60%;
-font-size: 18px;
-
-}
-
-button, html [type="button"], [type="reset"], [type="submit"] {
-    -webkit-appearance: inherit;
-
-}
-.cartBtn {
-    -webkit-appearance: inherit;
-}
-
-th {
-    border-bottom: thin;
-    border-bottom-color: black;
-    border-bottom-style: solid;
-}
-.itemCol {
-    width:45%;
-}
-.priceCol {
-    width:25%;
-text-align: center;
-}
-.qttCol {
-    width:8%;
-text-align: center;
-}
-.lastCol {
-    width: auto;
-}
-.cartRow {
-
-}
-h4 {
-    text-indent: 8px;
-}
-/*Pizza Menu Styles */
-    .pizza {
-background-color: darkgrey;
-border-radius: 8px;
-    margin: 2%;
-
-}
-.pizza:hover {
-    background-color: aliceblue;
-
-}
-td.pizzaName {
-    text-decoration-line: underline;
-    text-align: left;
-}
-.desc {
-    font-size: 14px;
-}
-.menu {
-    display: none;
-    max-width: 100%;
-float: inherit;
-display: grid;
-grid-template-columns: repeat(auto-fill, 30%);
-justify-content: center;
-background-color: dimgray;
-
-}
-/*HTML Style Rule*/
-    .cartBtn{
-        float: right;
-/*padding-right: 5%;*/
-        margin: .1%;
-padding-top: 0;
-outline: thick;
-border: thick;
-position: relative;
-z-index: 1000000000000000;
-text-align: center;
-        background-color:grey;
-
-}
-.dropDown {
-    display: none;
-}
-section {
-    display: inline-block;
-}
-html {
-    background-color: darkgray;
-}
-body{
-    margin: 0;
-    color: white;
-
-}
-.page{
-        height: -webkit-fill-available;
-    margin-bottom: 10px;
-    border-bottom-style: groove;
-    border-bottom-width: thin;
-    margin-top: 10px;
-    border-top-style: groove;
-    border-top-width: thin;
-    width: -webkit-fill-available;
-    height: -webkit-fill-available;
-    background-image: url("https://i.pinimg.com/736x/f9/0b/b6/f90bb6a7518f0bbca38368395bf81f7c--cellphone-wallpapers-pizza-pizza.jpg");
-height: 100%;
-background-position: center;
-background-repeat: no-repeat;
-background-size: cover;
-}
-h1 {
-/*  position: absolute;
-z-index: 3;
-top: 0;
-left: 0;
-width: 100%;
-height: 48px;
-*/
-display: block;
-font-size: 2em;
+    
+    <style type="text/css">
+        /*Build your own section style */
+        .byo {
+            text-align: center;
+        }
+            /* CART STYLE */
+            .cart {
+            background-color:beige;
+            border-radius: 8px;
+            outline-color: black;
+            outline-style: solid;
+            outline-width: thin;
+            border-color: black;
+            border-width: thin;
+            table-layout: fixed;
+            width: 60%;
+            font-size: 18px;
+            
+        }
+        .cartBtn2 {
+            
+        }
+        
+        th {
+            border-bottom: thin;
+            border-bottom-color: black;
+            border-bottom-style: solid;
+        }
+        .itemCol {
+            width:45%;
+        }
+        .priceCol {
+            width:25%;
+            text-align: center;
+        }
+        .qttCol {
+            width:8%;
+            text-align: center;
+        }
+        .lastCol {
+            width: auto;
+        }
+        .cartRow {
+            
+        }
+        h4 {
+            text-indent: 8px;
+        }
+        /*Pizza Menu Styles */
+            .pizza {
+        background-color: darkgrey;
+        border-radius: 8px;
+        margin: 2%;
+        
+    }
+    .pizza:hover {
+        background-color: aliceblue;
+        
+    }
+    td.pizzaName {
+        text-decoration-line: underline;
+        text-align: left;
+    }
+    .desc {
+        font-size: 14px;
+    }
+    .menu {
+        display: none;
+        max-width: 100%;
+        float: inherit;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 30%);
+        justify-content: center;
+        background-color: dimgray;
+        
+    }
+        /*HTML Style Rule*/
+        .cartBtn{
+                float: right;
+    padding-right: 5%;
+    padding-top: 0;
+    outline: thick;
+    border: thick;
+    position: relative;
+    z-index: 1000000000000000;
+            text-align: center;
+        }
+        .dropDown {
+            display: none;
+        }
+        section {
+            display: inline-block;
+        }
+        html {
+            background-color: darkgray;
+        }
+        body{
+            margin: 0;
+                
+        }
+        .page{
+            margin-bottom: 10px;
+            border-bottom-style: groove;
+            border-bottom-width: thin;
+            margin-top: 10px;
+            border-top-style: groove;
+            border-top-width: thin;
+            width: -webkit-fill-available;
+            height: -webkit-fill-available;
+                background-image: url("https://i.pinimg.com/736x/f9/0b/b6/f90bb6a7518f0bbca38368395bf81f7c--cellphone-wallpapers-pizza-pizza.jpg");
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+        }
+        h1 {
+              /*  position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 48px;
+            */
+                display: block;
+    font-size: 2em;
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
     overflow: visible;
-        color: blanchedalmond !important;
-        font-family: cursive;
-        background-color:#235;
-        text-align: center;
-        font-size: 200%;
-/*border-radius: 8px;*/
+            color: blanchedalmond !important;
+            font-family: cursive;
+            background-color:#235; 
+            text-align: center; 
+            font-size: 200%;
+            /*border-radius: 8px;*/
+            width: 100%;
+            line-height: 1.21053;
+            font-weight: 400;
+            letter-spacing: .012em;
+            /*column-fill: auto;*/
+        }
+        h2{
+            color: #000;
+    position: relative;
+    z-index: 1;
     width: 100%;
-line-height: 1.21053;
-font-weight: 400;
-letter-spacing: .012em;
-/*column-fill: auto;*/
-}
-h2{
-    color: blanchedalmond !important;
-position: relative;
-    align-content: center;
-z-index: 1;
-width: 100%;
-background-position: center center;
-display: block;
-font-size: 1.5em;
+    background-position: center center;
+    display: block;
+    font-size: 1.5em;
     -webkit-margin-before: 0.83em;
     -webkit-margin-after: 0.83em;
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
     font-weight: bold;
-        text-align: center;
-}
-nav {
-    background-color: #f2f2f2;
-width: 100%; /*Uses 100% width of the screen*/
-height: 43px;
-    font-size: 16px;
-/*Families: Serif Fonts, Sans-Serif Fonts, Monospace Fonts*/
-/*font-family: "Times New Roman", Times, serif;*/
-/*font: Courier New, Courier, sans-serif; /*No barbs*/
-    font-weight: bold;
-    text-align: center;
-/*text-shadow: 3px 2px 3px #333333; /*CSS3 feature*/
-/*background-color: cornflowerblue;*/
-/*border-radius: 8px; /*CSS3 feature rounded edges*/
-    font-size: 12px;
+                text-align: center;
+        }
+        nav {
+                background-color: #f2f2f2;
+            width: 100%; /*Uses 100% width of the screen*/
+            height: 43px;
+            font-size: 16px;
+            /*Families: Serif Fonts, Sans-Serif Fonts, Monospace Fonts*/
+            /*font-family: "Times New Roman", Times, serif;*/
+            /*font: Courier New, Courier, sans-serif; /*No barbs*/
+            font-weight: bold;
+            text-align: center;
+            /*text-shadow: 3px 2px 3px #333333; /*CSS3 feature*/
+            /*background-color: cornflowerblue;*/
+            /*border-radius: 8px; /*CSS3 feature rounded edges*/
+                font-size: 12px;
     line-height: 1.5;
-font-weight: 400;
-letter-spacing: 0em;
+    font-weight: 400;
+    letter-spacing: 0em;
     font-family: "SF Pro Text","Myriad Set Pro","SF Pro Icons","Apple Legacy Chevron","Helvetica Neue","Helvetica","Arial",sans-serif;
-/*background: rgba(242,242,242,0.7);*/
+                /*background: rgba(242,242,242,0.7);*/
     overflow: visible;
     padding: 0;
-padding-top: 0px;
+    padding-top: 0px;
     padding-bottom: 10px;
     position: relative;
     text-align: center;
     width: 100%;
-/*height: 86px;
+    /*height: 86px;
     z-index: 9987;*/
-}
-/*Unordered list in the nav area*/
-    nav ul {
-        height: auto;
-        padding: 8px 0px;
-    margin: 0px;
-}
-/*List item in the nav area*/
-    nav li {
-        display: inline; /*position text horizontally*/
-        padding: 10px;
-    border-bottom: 1px solid #d6d6d6;
-}
-/*Anchor in the nav area*/
-    nav a {
-        text-decoration: none; /*removes underline*/
-        color: midnightblue; /* Red Green Blue Channels*/
-        padding: 8px;
-/*padding: 8px 8px;
-    padding: 8px 8px 8px 8px;*/
-}
-/*Anchor in the nav area when the Mouse Hovers over the area*/
-    nav a:hover {
-        color: lightsteelblue; /*Lime green*/
-/*background-color: #FFF;*/
-}
-footer{
-    font-size: 12px;
+        }
+            /*Unordered list in the nav area*/
+            nav ul {
+                height: auto;
+                padding: 8px 0px;
+                margin: 0px;
+            }
+            /*List item in the nav area*/
+            nav li {
+                display: inline; /*position text horizontally*/
+                padding: 10px;
+                border-bottom: 1px solid #d6d6d6;
+            }
+            /*Anchor in the nav area*/
+            nav a {
+                text-decoration: none; /*removes underline*/
+                color: midnightblue; /* Red Green Blue Channels*/
+                padding: 8px;
+                /*padding: 8px 8px;
+            padding: 8px 8px 8px 8px;*/
+            }
+                /*Anchor in the nav area when the Mouse Hovers over the area*/
+                nav a:hover {
+                    color: lightsteelblue; /*Lime green*/
+                    /*background-color: #FFF;*/
+                }
+        footer{
+                font-size: 12px;
     line-height: 1.5;
-font-weight: 400;
-letter-spacing: 0em;
+    font-weight: 400;
+    letter-spacing: 0em;
     font-family: "SF Pro Text","Myriad Set Pro","SF Pro Icons","Apple Legacy Chevron","Helvetica Neue","Helvetica","Arial",sans-serif;
-}
+        }
 
-footer li {
-    display: inline; /*position text horizontally*/
-    padding: 20px;
-    border-radius: 8px;
-}
+        footer li {
+            display: inline; /*position text horizontally*/
+            padding: 20px;
+            border-radius: 8px;
+        }
 
-footer a {
-    text-decoration: none; /*removes underline*/
-    border-radius: 8px;
-}
-footer a:hover {
-/*color: blanchedalmond; /*Lime green*/
-    color: lightsteelblue;
-/*border-radius: 5%;*/
-}
-aside {
-    height:fill;
-    width:fill;
-    float:left;
-    padding-right:5px;
+        footer a {
+            text-decoration: none; /*removes underline*/
+            border-radius: 8px;
+        }
+        footer a:hover {
+                    /*color: blanchedalmond; /*Lime green*/
+                color: lightsteelblue;
+                    /*border-radius: 5%;*/
+                }
+        aside {
+            height:fill;
+            width:fill;
+            float:left;
+            padding-right:5px;
 
-}
-aside a{
-    padding: 1px;
-    border-bottom: 1px solid #d6d6d6;
-    font-size: 12px;
+        }
+        aside a{
+            padding: 1px;
+            border-bottom: 1px solid #d6d6d6;
+                            font-size: 12px;
     line-height: 1.5;
-font-weight: 400;
-letter-spacing: 0em;
+    font-weight: 400;
+    letter-spacing: 0em;
     font-family: "SF Pro Text","Myriad Set Pro","SF Pro Icons","Apple Legacy Chevron","Helvetica Neue","Helvetica","Arial",sans-serif;
-}
-aside a:hover {
-/*color: blanchedalmond; /*Lime green*/
-    background-color: lightsteelblue;
-/*border-radius: 5%;*/
-border-radius: 8px;
-}
-aside b{
-    color:white;
-    border-bottom-color: white;
-    border-bottom-style: solid;
-    border-bottom-width: 0px;
-    font-size: 1%;
-/* border-radius: 8px; */
-width: 100%;
-letter-spacing: 0em;
-}
-section.section {
-    width:100%;
-height:80%;
-font-size: 18px;
-    background-color: darkgrey;
-}
-h1.total{
-    background-color:firebrick;
-    color: aliceblue;
-    text-align: center;
-}
-section.area {
-    display:inline-block;
-}
-h3 {
-    text-align: center;
-padding: 1px;
-    margin: 1px;
-}
-h2 {
-    text-align: center;
+        }
+            aside a:hover {
+                    /*color: blanchedalmond; /*Lime green*/
+                    background-color: lightsteelblue;
+                    /*border-radius: 5%;*/
+                border-radius: 8px;
+                }
+        aside b{
+            color:white;
+            border-bottom-color: white;
+            border-bottom-style: solid;
+            border-bottom-width: 0px;
+                font-size: 1%;
+    /* border-radius: 8px; */
+    width: 100%;
+    letter-spacing: 0em;
+        }
+        section.section {
+            width:100%;
+            height:80%;
+            font-size: 18px;
+            background-color: darkgrey;
+        }
+        h1.total{
+            background-color:firebrick;
+            color: aliceblue;
+            text-align: center;
+        }
+        section.area {
+            display:inline-block;
+        }
+        h3 {
+                text-align: center;
     padding: 1px;
     margin: 1px;
-}
-.byoFormSect {
-    text-align: center;
+        }
+        h2 {
+            text-align: center;
+            padding: 1px;
+            margin: 1px;
+        }
+        .byoFormSect {
+            text-align: center;
+            
+        }
+        .byoHeadRow {
+            padding: 1px;
+            margin: 1px;
+            border: thin;
+        }
+        form.byoForm {
+            text-align: center;
+        }
+        .cartBtn2 {
 
+        }
+        img{
+            max-width: 50%;
+        }
+        aside.home{
+            float:left;
+        }
+        aside {
+            text-align: center;
+            width:10%;
+            height:35%;
+            float: left;
+            outline-style: groove;
+        }
+        section {
+            text-align: center;
+            width:100%;
+            height:50%;
+            
+        }
+        article {
+            text-align: center;
+            width:50%;
+            height:20%;
+            
+        }
+        img {
+            height:100%;
+            width:100%;
+            z-index: -1;
+        }
+        .bg {
+    background-image: url("https://i.pinimg.com/736x/f9/0b/b6/f90bb6a7518f0bbca38368395bf81f7c--cellphone-wallpapers-pizza-pizza.jpg");
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
-.byoHeadRow {
-    padding: 1px;
-    margin: 1px;
-    border: thin;
-}
-form.byoForm {
-    text-align: center;
-}
-.cartBtn2 {
-
-}
-img{
-    max-width: 50%;
-}
-aside.home{
-    float:left;
-}
-aside {
-    text-align: center;
-    width:10%;
-height:35%;
-float: left;
-outline-style: groove;
-}
-section {
-    text-align: center;
-    width:100%;
-height:50%;
-
-}
-article {
-    text-align: center;
-    width:50%;
-height:20%;
-
-}
-img {
-    height:100%;
-width:100%;
-z-index: -1;
-}
-.bg {
-background-image: url("https://i.pinimg.com/736x/f9/0b/b6/f90bb6a7518f0bbca38368395bf81f7c--cellphone-wallpapers-pizza-pizza.jpg");
-height: 100%;
-background-position: center;
-background-repeat: no-repeat;
-background-size: cover;
-}
-
-</style>
-    
+        
+    </style>
 </head>
-<!-----------------------------HEADER AREA----------------------->
-<header >
-<!-- float allows elements to float next to each other right, left, none or inherit-->
-<!-- You can clear the float left, right, both, none, inherit (from parent element)-->
+        <!-- HEADER AREA -->
+    <header >
+
+        
 
 
-
-<!--
+ <!--
 <div style="float:left;width:80px;height:80px">
-</div>
+ </div>
 -->
+        <h1 id="h1">
+            Dase Pizza
+        </h1>
 
-<!-- You can text-align: left, right, center, justify, initial (default value), inherit (from parent element)-->
-<h1 id="h1">
-Dase Pizza
-</h1>
+        <!---NAVIGATION DIV -->
+        <nav>
+            <!img src="https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwj898Tp3ufWAhXFbSYKHVsjCQYQjRwIBw&url=http%3A%2F%2Fwww.istockphoto.com%2Fvector%2Fsketch-pepperoni-pizza-gm503244236-82420659&psig=AOvVaw3Dt6qPU6JbQuOfM9i45m6V&ust=1507782750358139">
+        
+         <label id="cartLbt" class="cartBtn">Cart Total:<div id="total"></div> <input value="View Cart" type="button" id="cartBtn"></label>
+         <!--- -->
+<!img
+            src="https://i.pinimg.com/736x/32/17/8c/32178c188f1d6c7fc134b3ac29555757--pizza-design-motivation-inspiration.jpg" >
 
-<!-----------------------------NAVIGATION DIV--------------------
-<nav><img src="https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwj898Tp3ufWAhXFbSYKHVsjCQYQjRwIBw&url=http%3A%2F%2Fwww.istockphoto.com%2Fvector%2Fsketch-pepperoni-pizza-gm503244236-82420659&psig=AOvVaw3Dt6qPU6JbQuOfM9i45m6V&ust=1507782750358139">
------>
-<nav style="overflow: scroll;height: fit-content;padding: inherit;">
-<label id="cartLbt" class="cartBtn">Cart Total:<div id="total"></div> <input value="View Cart" type="button"
-                                                                             id="cartBtn" class="link"></label>
-<!---
-<img src="https://i.pinimg.com/736x/32/17/8c/32178c188f1d6c7fc134b3ac29555757--pizza-design-motivation-inspiration.jpg" >
--->
-<ul><li></li>
-<li><a href="#home" id="navHome" class="links" rel="home">Pizza Shop Home</a></li>
-<li><a href="#menu" id="navMenu" class="links" rel="menu">Pizza Shop Menu</a></li>
-<li><a href="#about" id="navAbout" class="links" rel="about">Pizza Shop About</a></li>
-</ul>
+                <ul><li></li>
+                    <li><a href="#home" id="navHome" class="links" rel="home">Pizza Shop Home</a></li>
+                    <li><a href="#menu" id="navMenu" class="links" rel="menu">Pizza Shop Menu</a></li>
+                    <li><a href="#about" id="navAbout" class="links" rel="about">Pizza Shop About</a></li>
+                </ul>
 
 <script>
-function updateCart() {
-    var total_str = cartTotal.toFixed(2);
-$("#total").html("$"+ total_str);
-}
+            function updateCart() {
+                var total_str = cartTotal.toFixed(2);
+            $("#total").html("$"+ total_str);
+            }
 </script>
-</nav>
+        </nav>
 
-</header>
+    </header>
 <body id="h1">
 
-
-<!-----------------------------HOME AREA----------------------------->
-<div id="home" style="display:block" class="page">
-<h2>Home Page Section
-<aside class="home">
-<a href="#menu" id="navMenu" class="links" rel="menu">Pizza Shop Menu</a><br>
-<a><href=#cartBtn value="View Cart" class="links" id="cartBtn2" class="cartBtn2">View Cart</href></a><br>
-<a href="#about" id="navAbout" class="links" rel="about">Pizza Shop About</a><br>
-</aside>
-</h2>
-<section style="text-align:center"></section>
-<article></article>
-<img src="https://www.mdcthereporter.com/wp-content/uploads/2017/09/italian-pizza.jpg">
-</div>
-<script>
-$("#cartBtn2").click(function() {$("#cartBtn").click();});
+        
+    <!---HOME AREA -->
+    <div id="home" style="display:block" class="page">
+        <h2>Home Page Section
+            <aside class="home">
+                <a href="#menu" id="navMenu" class="links" rel="menu">Pizza Shop Menu</a><br>
+                <a> href=#cartBtn value="View Cart" class="links" id="cartBtn2" class="cartBtn2">View Cart</a><br>
+                <a href="#about" id="navAbout" class="links" rel="about">Pizza Shop About</a><br>
+            </aside>
+        </h2>
+        <section style="text-align:center"></section>
+        <article></article>
+        <img src="https://www.mdcthereporter.com/wp-content/uploads/2017/09/italian-pizza.jpg">
+    </div>
+    <script>
+        $("#cartBtn2").click(function() {$("#cartBtn").click();});
     </script>
-    <!-----------------------------MENU AREA----------------------------->
+    <!--MENU AREA -->
     <div id="menu" style="display:none" class="page">
-    <h1>Pizza Menu</h1>
-    <h2><input type="button" id="byoBtn" class="byoBtn" value="Build Your Own"></h2>
-    <div id="pizzaMenu" class="menu"></div>
+        <h2>Pizza Menu</h2>
+        <h3><input type="button" id="byoBtn" class="byoBtn" value="Build Your Own"></h3>
+        <div id="pizzaMenu" class="menu"></div>
     </div>
-    <!-----------------------------ABOUT AREA---------------------------->
+    
     <div id="about" style="display:none" class="page" class="bg">
-    <h2>About Page Section</h2>
-    <aside>sidebar</aside>
-    <section>distinct title and region</section>
-    <article>self-contained composition (syndication) in a doc</article>
+        <h2>About Page Section</h2>
+        <aside>sidebar</aside>
+        <section>distinct title and region</section>
+        <article>self-contained composition (syndication) in a doc</article>
     </div>
-    <!-----------------------------TERMS AREA----------------------------->
+    
     <div id="terms" style="display:none" class="page">
-    <h2>Terms Page Section</h2>
-    <aside class="bg" style="height:100%">sidebar</aside>
-    <section>distinct title and region</section>
-    <article>self-contained composition (syndication) in a doc</article>
+        <h2>Terms Page Section</h2>
+        <aside class="bg" style="height:100%">sidebar</aside>
+        <section>distinct title and region</section>
+        <article>self-contained composition (syndication) in a doc</article>
     </div>
-    <!-----------------------------SITE AREA----------------------------->
+    
     <div id="site" style="display:none" class="page">
-    <h2>Site Page Section</h2>
-    <aside>sidebar</aside>
-    <section class="bg" style="height:100%">distinct title and region</section>
-    <article class="bg" style="height:100%">self-contained composition (syndication) in a doc</article>
+        <h2>Site Page Section</h2>
+        <aside>sidebar</aside>
+        <section class="bg" style="height:100%">distinct title and region</section>
+        <article class="bg" style="height:100%">self-contained composition (syndication) in a doc</article>
     </div>
 
-    <!-----------------------------CONTACT AREA---------------------------->
+    
     <div id="contact" style="display:none" class="bg">
-    <h2>Contact Page Section</h2>
-    <aside>sidebar</aside>
-    <section class="bg" style="height:100%">distinct title and region</section>
-    <article>self-contained composition (syndication) in a doc</article>
+        <h2>Contact Page Section</h2>
+        <aside>sidebar</aside>
+        <section class="bg" style="height:100%">distinct title and region</section>
+        <article>self-contained composition (syndication) in a doc</article>
     </div>
-
-    <!-----------------------------CART AREA---------------------------->
+    
+    <!--Cart -->
     <div id="cartDiv" style="display:none" class="cart">
-    <h2>Cart</h2>
-    <div id="cart" class="cart">
-    <table id="cartTbl" class="cartTbl">
-    <thead>
-    <tr><th class="itemCol">Item</th><th class="priceCol">Price</th><th class="qttCol">Quantity</th><th class="lastCol"></th></tr>
-    </thead>
-    <tbody id="cartBody">
-    <tr id="ID_SPOT" class="cartRow"><td class="itemCol">ITEM_SPOT</td><td class="priceCol">PRICE_SPOT</td><td class="qttCol">Q_SPOT</td><td class="lastCol"></td></tr>
-    </tbody>
-    <tfoot>
-    <tr><td>Total</td><td id="gTotal"></td><td><input type="button" value="View Cart" class="coutBtn" colspan="2"></td><td></td></tr>
-    </tfoot>
-    </table>
+        <h2>Cart</h2>
+        <div id="cart" class="cart">
+            <table id="cartTbl" class="cartTbl">
+                <thead>
+                    <tr><th class="itemCol">Item</th><th class="priceCol">Price</th><th class="qttCol">Quantity</th><th class="lastCol"></th></tr>
+                </thead>
+                <tbody id="cartBody">
+                    <tr id="ID_SPOT" class="cartRow"><td class="itemCol">ITEM_SPOT</td><td class="priceCol">PRICE_SPOT</td><td class="qttCol">Q_SPOT</td><td class="lastCol"></td></tr>
+                </tbody>
+                <tfoot>
+                    <tr><td>Total</td><td id="gTotal"></td><td><input type="button" value="View Cart" class="coutBtn" colspan="2"></td><td></td></tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
-    </div>
-    <!-----------------------------BYO AREA---------------------------->
+    <!---BYO AREA -->
     <div id="byoDiv" style="display:none" class="byo">
     <h2>Build Your Own Pizza!</h2>
-    <form id="byoForm" class="byoForm">
-    </form>
-    <table id="byoTbl" class="byoTbl">
-    </table>
-    <div id="byoFormDiv" class="byoFormDiv"></div>
-    <input type="submit">
-
+        <form id="byoForm" class="byoForm">
+            </form>
+            <table id="byoTbl" class="byoTbl">
+            </table>
+            <div id="byoFormDiv" class="byoFormDiv"></div>
+        <input type="submit">
+        
     </div>
-    <!-----------------------------FOOTER AREA---------------------------->
+    <!---FOOTER AREA -->
     <footer>
-    <div>
-    <ul>
-    <li>Sample Footer Area2&copy; 2015</li>
-    <li><a href="#terms" id="ftrTerms">Terms of Use</a></li>
-    <li><a href="#site" id="ftrSite">Site Map</a></li>
-    <li><a href="#contact" id="ftrContact">Contact Us</a></li>
-    </ul>
-    </div>
+        <div>
+            <ul>
+                <li>Sample Footer Area2&copy; 2015</li>
+                <li><a href="#terms" id="ftrTerms">Terms of Use</a></li>
+                <li><a href="#site" id="ftrSite">Site Map</a></li>
+                <li><a href="#contact" id="ftrContact">Contact Us</a></li>
+            </ul>
+        </div>
     </footer>
-    <!-----------------------------JAVASCRIPT AREA----------------------->
+    <!--JAVASCRIPT AREA -->
     <script>
     //cartJSON.cart[x]["item"] = "pizza1";
     //cartJSON.cart[x]["price"] = 1.95;
@@ -604,234 +586,234 @@ $("#cartBtn2").click(function() {$("#cartBtn").click();});
             $(document).ready(function () {
                 //$("#")
 var byoJSON = [
-{"element":"crust",
-    "type": [{"name":"thin","price":{"small": 7.95,"medium": 8.95,"large": 9.95}},              {"name":"thick","price": {"small": 7.95,"medium": 8.95,"large": 9.95}}
-    ]},
-    {"element":"sauce",
-    "type": [{
-    "name":"original","price": {"small": 0.50,"medium": 0.60,"large": 0.70},
-    "name":"spicy","price": {"small": 0.80,"medium": 0.90,"large": 1.00}
-    }]},
+    {"element":"crust",
+	"type": [{"name":"thin","price":{"small": 7.95,"medium": 8.95,"large": 9.95}},              {"name":"thick","price": {"small": 7.95,"medium": 8.95,"large": 9.95}}
+	]},
+         {"element":"sauce",
+	"type": [{
+		"name":"original","price": {"small": 0.50,"medium": 0.60,"large": 0.70},
+		"name":"spicy","price": {"small": 0.80,"medium": 0.90,"large": 1.00}
+	}]},
     { "element":"cheese",
-    "type": [{
-    "name":"chedder","price": {"small": 1.10,"medium": 1.11,"large": 1.12},
-    "name":"mozzerella","price": {"small": 1.20,"medium": 1.21,"large": 1.22},
-    "name":"parmesan","price": {"small": 1.30,"medium": 1.31,"large": 1.32},
-    "name":"blend","price": {"small": 1.40,"medium": 1.41,"large": 1.42}
+	"type": [{
+		"name":"chedder","price": {"small": 1.10,"medium": 1.11,"large": 1.12},
+		"name":"mozzerella","price": {"small": 1.20,"medium": 1.21,"large": 1.22},
+		"name":"parmesan","price": {"small": 1.30,"medium": 1.31,"large": 1.32},
+		"name":"blend","price": {"small": 1.40,"medium": 1.41,"large": 1.42}
     }]},
     {"element":"extra",
-    "type": [{
-    "name": "extra cheese","price": 1}, {
-    "name": "pepperoni","price": 1.50}
-    ]}
-    ];
-    function showByo() {
-    var options_html = "";
-    var header_row = "";
-    var data_row   = "";
-    for(var x in byoJSON){
-    var element = byoJSON[x].element;
-    $("#byoTbl").append("<td>"+element+"</td><td><select id=\""+element+"Sel\">"+element+"</select></td>");
-    for(var y in byoJSON[x].type){
-    var name = byoJSON[x].type[y].name;
-    $("#"+element+"Sel").append("<option>"+name+"</option>");
-    }
-    }
-    }
-    function showByo2() {
-    var options_html = "";
-    var header_row = "";
-    var data_row   = "";
+	"type": [{
+		"name": "extra cheese","price": 1}, {
+		"name": "pepperoni","price": 1.50}
+            ]}
+              ];
+                function showByo() {
+                var options_html = "";
+                var header_row = "";
+                var data_row   = "";
+                for(var x in byoJSON){
+                    var element = byoJSON[x].element;
+                    $("#byoTbl").append("<td>"+element+"</td><td><select id=\""+element+"Sel\">"+element+"</select></td>");
+                    for(var y in byoJSON[x].type){
+                        var name = byoJSON[x].type[y].name;
+                        $("#"+element+"Sel").append("<option>"+name+"</option>");
+                    }
+                }
+                }
+                function showByo2() {
+                var options_html = "";
+                var header_row = "";
+                var data_row   = "";
+                    
+                for(var x in byoJSON){
+                    var sel_name = byoJSON[x].element;
+                    console.log(sel_name);
+                    //$("#byoFormDiv").append("<select id=\"" + sel_name + "Sel\">" + sel_name + "</select>");
+                    data_row += "<td id=\"byoSel\" class=\"byoSel\"><select id=\"" + sel_name + "Sel\">" + sel_name + "</select></td>";
+                    header_row += "<td id=\"byoHead\" class=\"byoHead\"><p>" + sel_name +"</p>"+ "</td>";
+                    var id = sel_name + "Sel";
+                    for(var y in byoJSON[x].type){
+                        var name = byoJSON[x].type[y].name;
+                    options_html += "<option id=\"" + name +"_"+ sel_name +"Crust\">" + name + "</option>";                        
+                    }
+                    $("#byoDataRow").html(data_row)
+                    $("#"+id).html(options_html);
+                    options_html ="";
+                    
+                }
+                $("#byoHeadRow").html(header_row);
+                    
+                }
+                    function trash(){
+                $("#crustS").append(options_html);
+                options_html = "";
+                for(var x in byoJSON.sauce){
+                    var name = byoJSON.sauce[x].name;
+                    options_html += "<option id=\"" + name + "Sauce\">" + name + "</option>";
+                }
+                $("#sauceS").append(options_html);
+                options_html = "";
+                for(var x in byoJSON.cheese){
+                    var name = byoJSON.cheese[x].name;
+                    options_html += "<option id=\"" + name + "Cheese\">" + name + "</option>";
+                }
+                $("#cheeseS").append(options_html);
+                options_html = "";
+                for(var x in byoJSON.extra){
+                    var name = byoJSON.cheese[x].name;
+                    options_html += "<input type=\"checkbox\" class=\"extra\" id=\"" + name + "Extra\">";
+                }               
+                $("#extraS").append(options_html);
+                options_html = "";
+                }
+                
+                var cartJSON = {"cart":[]};
+                        var row_template = "<tr id=\"ID_SPOT\" class=\"cartRow\"><td class=\"itemCol\">ITEM_SPOT</td><td class=\"priceCol\">PRICE_SPOT</td><td class=\"qttCol\">Q_SPOT</td><td class=\"lastCol\"></td></tr>";
+                function showCart () {
+                    $("#cartBody").html("");
+                    var total = 0.00;
+                    for (var x in cartJSON.cart){
+                        var item = cartJSON.cart[x]["item"];
+                        var price = cartJSON.cart[x]["price"];
+                        var q = cartJSON.cart[x]["q"];
+                        var desc = cartJSON.cart[x]["desc"];
+                        var my_row = row_template;
+                        my_row = my_row.replace("ID_SPOT",item);
+                        my_row = my_row.replace("ITEM_SPOT","<h4>"+item + "<h4><p class\"cartItmDesc\">"+desc+"</p>");
+                        my_row = my_row.replace("PRICE_SPOT",price);
+                        my_row = my_row.replace("Q_SPOT",q);
+                        //my_row = my_row.replace("ID_SPOT",item);
+                        if(q > 0){
+                        $("#cartBody").append(my_row);
+                        }
+                        total += price * q;
+                    }
+                    $("#gTotal").html("$" + total.toFixed(2));
+                }
+                updateCart();
+                var menuItems = [];
+                //When home link is clicked show home area
+                $("#navHome").click(function (event) {
+                    $("#home").show();
+                    $(".cart").attr("style","display:none");
+                    $("#byoDiv").attr("style","display:none");
+                    $("#menu, #about, #terms, #site, #contact").hide();
+                });
+                 //Add When menu link is clicked show menu area
+                $("#navMenu").click(function (event) {
+                    $("#menu").show();
+                    $(".cart").attr("style","display:none");
+                    $("#byoDiv").attr("style","display:none");
+                    $("#home, #about, #terms, #site, #contact").hide();
+                    createMenu();
+                    $("#menuTable").append(html);
+                });
+                 //Add When about link is clicked show about area
+                $("#navAbout").click(function (event) {
+                    $("#about").show();
+                    $(".cart").attr("style","display:none");
+                    $("#byoDiv").attr("style","display:none");
+                    $("#menu, #home, #terms, #site, #contact").hide();
+                });
+                 //Add When terms link is clicked show terms area
+                $("#ftrTerms").click(function (event) {
+                    $("#terms").show();
+                    $("#menu, #home, #about, #site, #contact").hide();
+                });
+                 //Add When site link is clicked show site area
+                $("#ftrSite").click(function (event) {
+                    $("#site").show();
+                    $("#menu, #home, #terms, #about, #contact").hide();
+                });
+                //Add When contact link is clicked show contact area
+                $("#ftrContact").click(function (event) {
+                    $("#contact").show();
+                    $("#menu, #home, #terms, #site, #about").hide();
+                });
+                $("#cartBtn").click(function (event) {
+                    $(".page").attr("style","display:none");
+                    $(".byo").attr("style","display:none");
+                    $(".cart").attr("style","display:block");
+                    showCart();
+                });
+                $("#byoBtn").click(function(){
+                    $(".page").attr("style","display:none");
+                    $(".cart").attr("style","display:none");
+                    $("#byoDiv").attr("style","display:block");
+                    showByo();
+                });
 
-    for(var x in byoJSON){
-    var sel_name = byoJSON[x].element;
-    console.log(sel_name);
-    //$("#byoFormDiv").append("<select id=\"" + sel_name + "Sel\">" + sel_name + "</select>");
-    data_row += "<td id=\"byoSel\" class=\"byoSel\"><select id=\"" + sel_name + "Sel\">" + sel_name + "</select></td>";
-    header_row += "<td id=\"byoHead\" class=\"byoHead\"><p>" + sel_name +"</p>"+ "</td>";
-    var id = sel_name + "Sel";
-    for(var y in byoJSON[x].type){
-    var name = byoJSON[x].type[y].name;
-    options_html += "<option id=\"" + name +"_"+ sel_name +"Crust\">" + name + "</option>";
-    }
-    $("#byoDataRow").html(data_row)
-    $("#"+id).html(options_html);
-    options_html ="";
+                 //***** Load the Menu Area with the JSON data *******
+                
+                function createMenu(){
+                    $("#pizzaMenu").html("");
+        //$("#pizzaMenu").attr("style","display:-webkit-inline-box");
+        //CREATE PIZZA BTN
+        var pizza_str = "<div class=\"pizza\"><pizza id=\"unique_id\"><table><tr><td class=\"pizzaName\"><name>Pizza_Name</name></td><td></td><td></td><td></td><td><size><select class=\"sizeBtn\" ></select></size></td></tr><tr><td colspan=\"2\" rowspan=\"2\"class=\"desc\"><description>Desc_TXT</description></td><td></td><td></td><td colspan=\"2\">Quantity <select class=\"qntSel\">#</select></td></tr><tr><td></td><td></td><td><input type=\"button\" class=\"AddToCart\" value=\"Add To Cart\"></td></tr></table></pizza></div>";
+                    
+        var html_str="";
+        for(var x in pizzasJSON.pizza){
+            var my_html= pizza_str;
+            var name = pizzasJSON.pizza[x].name;
+            var desc = pizzasJSON.pizza[x].desc;
+            my_html = my_html.replace("unique_id",name);
+            my_html = my_html.replace("Pizza_Name",name);
+            my_html = my_html.replace("Desc_TXT",desc);
+            html_str += my_html;
+        }
+        $("#pizzaMenu").append(html_str);
+        $(".AddToCart").click(function(){
+            var price = parseFloat($(this).parentsUntil("div","pizza").find($(".sizeBtn")).val());
+            var quantity = parseFloat($(this).parentsUntil("div","pizza").find($(".qntSel")).val());
+            cartTotal += price * quantity;
+            console.log(parseFloat(cartTotal));
+            var item = $(this).parentsUntil("div","pizza").find($("name")).html();
+            CARTCOUNT += 1;
+            console.log(CARTCOUNT + " : " + item + " : " + price + " : " + quantity);
+            if(quantity > 0){
+            cartJSON.cart.push({"price": price,"item":item,"q":quantity,"desc":pizzasJSON.pizza[item].desc});
+            updateCart();
+            }
+                })
+        
+        // SECCTION FOR BUTTON   
+        var $select = $(".qntSel");
+        for (i=0;i<=10;i++){
+            $select.append($("<option></option>").val(i).html(i))
+        }
+        $(".sizeBtn").append($("<option></option>").val(0).html("Select Size").attr("selected","selected","disabled","disabled"));
+        $(".sizeBtn").click(function(){
+            //console.log($(this).attr("id"));
+            $(this).html("");
+            var pizza = $(this).parentsUntil("div","pizza").attr("id");
+            var small = pizzasJSON.pizza[pizza].price.small;
+            var medium = pizzasJSON.pizza[pizza].price.medium;
+            var large = pizzasJSON.pizza[pizza].price.large;
+            $(this).append($("<option></option>").val(small).html("Small   $"+small));
+            $(this).append($("<option></option>").val(medium).html("Medium $"+medium));
+            $(this).append($("<option></option>").val(large).html("large   $"+large));
+        });
 
-    }
-    $("#byoHeadRow").html(header_row);
 
-    }
-    function trash(){
-    $("#crustS").append(options_html);
-    options_html = "";
-    for(var x in byoJSON.sauce){
-    var name = byoJSON.sauce[x].name;
-    options_html += "<option id=\"" + name + "Sauce\">" + name + "</option>";
-    }
-    $("#sauceS").append(options_html);
-    options_html = "";
-    for(var x in byoJSON.cheese){
-    var name = byoJSON.cheese[x].name;
-    options_html += "<option id=\"" + name + "Cheese\">" + name + "</option>";
-    }
-    $("#cheeseS").append(options_html);
-    options_html = "";
-    for(var x in byoJSON.extra){
-    var name = byoJSON.cheese[x].name;
-    options_html += "<input type=\"checkbox\" class=\"extra\" id=\"" + name + "Extra\">";
-    }
-    $("#extraS").append(options_html);
-    options_html = "";
-    }
+                    
+                    //html_string += "</table>";
+                    //return html_string;
+                }
 
-    var cartJSON = {"cart":[]};
-    var row_template = "<tr id=\"ID_SPOT\" class=\"cartRow\"><td class=\"itemCol\">ITEM_SPOT</td><td class=\"priceCol\">PRICE_SPOT</td><td class=\"qttCol\">Q_SPOT</td><td class=\"lastCol\"></td></tr>";
-    function showCart () {
-    $("#cartBody").html("");
-    var total = 0.00;
-    for (var x in cartJSON.cart){
-    var item = cartJSON.cart[x]["item"];
-    var price = cartJSON.cart[x]["price"];
-    var q = cartJSON.cart[x]["q"];
-    var desc = cartJSON.cart[x]["desc"];
-    var my_row = row_template;
-    my_row = my_row.replace("ID_SPOT",item);
-    my_row = my_row.replace("ITEM_SPOT","<h4>"+item + "<h4><p class\"cartItmDesc\">"+desc+"</p>");
-    my_row = my_row.replace("PRICE_SPOT",price);
-    my_row = my_row.replace("Q_SPOT",q);
-    //my_row = my_row.replace("ID_SPOT",item);
-    if(q > 0){
-    $("#cartBody").append(my_row);
-    }
-    total += price * q;
-    }
-    $("#gTotal").html("$" + total.toFixed(2));
-    }
-    updateCart();
-    var menuItems = [];
-    //When home link is clicked show home area
-    $("#navHome").click(function (event) {
-$("#home").show();
-$(".cart").attr("style","display:none");
-$("#byoDiv").attr("style","display:none");
-$("#menu, #about, #terms, #site, #contact").hide();
+                        
+                    
+                    //infinitly loop
+                    //if(x == 255){
+                      //  x = 0;
+                    //}
+                //}
+                $("#navMenu").click();
+    
 });
-//Add When menu link is clicked show menu area
-$("#navMenu").click(function (event) {
-$("#menu").show();
-$(".cart").attr("style","display:none");
-$("#byoDiv").attr("style","display:none");
-$("#home, #about, #terms, #site, #contact").hide();
-    createMenu();
-$("#menuTable").append(html);
-});
-//Add When about link is clicked show about area
-$("#navAbout").click(function (event) {
-$("#about").show();
-$(".cart").attr("style","display:none");
-$("#byoDiv").attr("style","display:none");
-$("#menu, #home, #terms, #site, #contact").hide();
-});
-//Add When terms link is clicked show terms area
-$("#ftrTerms").click(function (event) {
-$("#terms").show();
-$("#menu, #home, #about, #site, #contact").hide();
-});
-//Add When site link is clicked show site area
-$("#ftrSite").click(function (event) {
-$("#site").show();
-$("#menu, #home, #terms, #about, #contact").hide();
-});
-//Add When contact link is clicked show contact area
-$("#ftrContact").click(function (event) {
-$("#contact").show();
-$("#menu, #home, #terms, #site, #about").hide();
-});
-$("#cartBtn").click(function (event) {
-$(".page").attr("style","display:none");
-$(".byo").attr("style","display:none");
-$(".cart").attr("style","display:block");
-    showCart();
-});
-$("#byoBtn").click(function(){
-$(".page").attr("style","display:none");
-$(".cart").attr("style","display:none");
-$("#byoDiv").attr("style","display:block");
-    showByo();
-});
-
-//***** Load the Menu Area with the JSON data *******
-
-function createMenu(){
-$("#pizzaMenu").html("");
-    //$("#pizzaMenu").attr("style","display:-webkit-inline-box");
-    //CREATE PIZZA BTN
-    var pizza_str = "<div class=\"pizza\"><pizza id=\"unique_id\"><table><tr><td class=\"pizzaName\"><name>Pizza_Name</name></td><td></td><td></td><td></td><td><size><select class=\"sizeBtn\" ></select></size></td></tr><tr><td colspan=\"2\" rowspan=\"2\"class=\"desc\"><description>Desc_TXT</description></td><td></td><td></td><td colspan=\"2\">Quantity <select class=\"qntSel\">#</select></td></tr><tr><td></td><td></td><td><input type=\"button\" class=\"AddToCart\" value=\"Add To Cart\"></td></tr></table></pizza></div>";
-
-    var html_str="";
-    for(var x in pizzasJSON.pizza){
-        var my_html= pizza_str;
-        var name = pizzasJSON.pizza[x].name;
-        var desc = pizzasJSON.pizza[x].desc;
-my_html = my_html.replace("unique_id",name);
-my_html = my_html.replace("Pizza_Name",name);
-my_html = my_html.replace("Desc_TXT",desc);
-    html_str += my_html;
-}
-$("#pizzaMenu").append(html_str);
-$(".AddToCart").click(function(){
-    var price = parseFloat($(this).parentsUntil("div","pizza").find($(".sizeBtn")).val());
-    var quantity = parseFloat($(this).parentsUntil("div","pizza").find($(".qntSel")).val());
-    cartTotal += price * quantity;
-    console.log(parseFloat(cartTotal));
-    var item = $(this).parentsUntil("div","pizza").find($("name")).html();
-    CARTCOUNT += 1;
-    console.log(CARTCOUNT + " : " + item + " : " + price + " : " + quantity);
-    if(quantity > 0){
-    cartJSON.cart.push({"price": price,"item":item,"q":quantity,"desc":pizzasJSON.pizza[item].desc});
-    updateCart();
-}
-})
-
-// SECCTION FOR BUTTON
-var $select = $(".qntSel");
-for (i=0;i<=10;i++){
-    $select.append($("<option></option>").val(i).html(i))
-}
-$(".sizeBtn").append($("<option></option>").val(0).html("Select Size").attr("selected","selected","disabled","disabled"));
-$(".sizeBtn").click(function(){
-    //console.log($(this).attr("id"));
-$(this).html("");
-    var pizza = $(this).parentsUntil("div","pizza").attr("id");
-    var small = pizzasJSON.pizza[pizza].price.small;
-    var medium = pizzasJSON.pizza[pizza].price.medium;
-    var large = pizzasJSON.pizza[pizza].price.large;
-$(this).append($("<option></option>").val(small).html("Small   $"+small));
-$(this).append($("<option></option>").val(medium).html("Medium $"+medium));
-$(this).append($("<option></option>").val(large).html("large   $"+large));
-});
 
 
+            //});
 
-//html_string += "</table>";
-//return html_string;
-}
-
-
-
-//infinitly loop
-//if(x == 255){
-  //  x = 0;
-//}
-//}
-$("#navMenu").click();
-
-});
-
-
-//});
-
-</script>
+     </script>
 </body>
 </html>

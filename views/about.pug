@@ -1,8 +1,13 @@
 extends layout
 block content
     include components/navbar
-    .jumbotron
+    .jumbotron.bg-transparent.card-img-overlay.text-primary(style="background-size: contain;")
         h1 About My Site
-            p The purpose of this website is to serve as a living resume of my technical skills.
-            p
-            a.btn.btn-primary.btn-lg(href='/') Home
+        p   The purpose of this website is to serve as a living resume of my technical skills.
+        p   Please sign in to access the rest of the site contents.
+        a.btn.btn-primary.btn-lg(href='/') Home
+        a.btn.btn-primary.btn-lg(href='/auth/sign-in') Sign In
+            script.
+                $(function () {
+                    $('body').css('background-image', 'url(\'/images/bridge-2.jpg\')').css('background-size', 'contain');
+                });

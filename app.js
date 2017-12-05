@@ -19,7 +19,6 @@ var flash = require('connect-flash');
 // Authorization pkgs
 var session =  require('express-session');
 const MongoStore = require('connect-mongo')(session);
-
 var app = express();
 var mongoDBStore = process.env.MONGODB || 'mongodb://127.0.0.1/austin-dase';
 /* Session configuration */
@@ -31,7 +30,7 @@ var sessionConfig = {
     store : new MongoStore({url: mongoDBStore})
 };
 if (app.get('env') === 'production') {
-    app.set('trust proxy', 1) // trust first proxy
+    app.set('trust proxy', 1);// trust first proxy
     sess.cookie.secure = true // serve secure cookies
 }
 
@@ -80,7 +79,7 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-    console.log(err);
+    //console.log(err);
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 

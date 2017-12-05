@@ -2,9 +2,9 @@ extends ../layout
 block content
     include ../components/navbar
     h2 Profile
-    .jumbotron
-        .card.text-white.bg-primary
-            h3.card-header  Local User Profile: #{info.user.username}
+    .jumbotron(style="background-image:url(/images/lake-hills.jpg);background-size: cover;")
+        .card.text-white
+                h3.card-header  Local User Profile: #{info.user.username}
                 .card-body
                     img(style='height: 100px; width: 100px; display: block;', src= info.user.profile.picture, alt='Users Profile Picture')
                     h5.card-title #{info.user.fname} #{info.user.lname}
@@ -21,3 +21,26 @@ block content
                         | Last Updated: #{info.user.updatedAt}
                     .row
                         | Created On: #{info.user.createdAt}
+        if user
+            .d#twitter2
+                input#username(type='hidden',
+                value= undefined === user.twitter ? 'TwitterDev' : user.username)
+                script.
+                    $(function () {
+                        // get the user's twitter handel from thr hidden input
+                        // and send the request to twitter
+                        var username = $('#username').val();
+                        $.ajax({
+                            method: "GET",
+                            url: "https://publish.twitter.com/oembed?url=https://twitter.com/" + username,
+                            dataType: "jsonp"
+                        }).done(function (data) {
+                            $('#twitter2').html(data.html);
+                            console.log(data.html);
+                        });
+                    });
+
+
+
+
+

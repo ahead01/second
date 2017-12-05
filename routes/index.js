@@ -66,8 +66,8 @@ router.get('/profile/update', authenticationMiddleware(), function(req, res, nex
     //res.render('/', { title: 'Google Profile' });
 });
 
-/* GET remove profile. */
-router.get('/about', authenticationMiddleware(), function(req, res, next) {
+/* GET about page. */
+router.get('/about', function(req, res, next) {
     console.log(req.user);
     console.log(req.isAuthenticated());
 
