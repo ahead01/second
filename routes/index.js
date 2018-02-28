@@ -5,8 +5,8 @@ var path = require('path');
 function authenticationMiddleware () {
     return function(req, res, next) {
 
-        console.log('req.session.passport' + req.session.passport);
-        console.log('req.session' + req.session);
+        //console.log('req.session.passport' + req.session.passport);
+        //console.log('req.session' + req.session);
 
         if (req.isAuthenticated()) return next();
         res.redirect('auth/sign-in');
@@ -15,8 +15,8 @@ function authenticationMiddleware () {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    console.log(req.user);
-    console.log(req.isAuthenticated());
+    //console.log(req.user);
+    //console.log(req.isAuthenticated());
     res.render('index', { title: 'Austin Dase' });
 });
 
@@ -27,8 +27,8 @@ router.get('/', function(req, res, next) {
 
 /* GET home page. */
 router.get('/profile/google', authenticationMiddleware(), function(req, res, next) {
-    console.log(req.user);
-    console.log(req.isAuthenticated());
+    //console.log(req.user);
+    //console.log(req.isAuthenticated());
     res.render('user/google-profile', { title: 'Google Profile' });
 });
 
@@ -50,8 +50,8 @@ router.get('/pizza-shop', authenticationMiddleware(), function(req, res, next) {
 
 /* GET remove profile. */
 router.get('/profile/remove', authenticationMiddleware(), function(req, res, next) {
-    console.log(req.user);
-    console.log(req.isAuthenticated());
+    //console.log(req.user);
+    //console.log(req.isAuthenticated());
 
     res.redirect('/auth/profile/remove');
     //res.render('user/google-profile', { title: 'Google Profile' });
@@ -60,19 +60,28 @@ router.get('/profile/remove', authenticationMiddleware(), function(req, res, nex
 
 /* GET update profile page. */
 router.get('/profile/update', authenticationMiddleware(), function(req, res, next) {
-    console.log(req.user);
-    console.log(req.isAuthenticated());
+    //console.log(req.user);
+    //console.log(req.isAuthenticated());
     res.redirect('/auth/profile');
     //res.render('/', { title: 'Google Profile' });
 });
 
 /* GET about page. */
 router.get('/about', function(req, res, next) {
-    console.log(req.user);
-    console.log(req.isAuthenticated());
+    //console.log(req.user);
+    //console.log(req.isAuthenticated());
 
     res.render('about');
     //res.render('user/google-profile', { title: 'Google Profile' });
 });
+
+/* GET home page. */
+router.get('/chat-room', authenticationMiddleware(), function(req, res, next) {
+    //console.log(req.user);
+    //console.log(req.isAuthenticated());
+    //res.render('projects/dase-pizza-w-cart');
+    res.sendFile(path.join(__dirname, '..', 'views/chat/chatroom.html'));
+});
+
 
 module.exports = router;

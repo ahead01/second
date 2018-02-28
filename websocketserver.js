@@ -1,42 +1,12 @@
-#!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
-
-var app = require('../app');
-var debug = require('debug')('austin-dase:server');
-var http = require('http');
-
-/**
- * Get port from environment and store in Express.
- */
-
-var port = normalizePort(process.env.PORT || '8000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
-var webSocketsServerPort = 1337;
+"use strict";
+// Optional. You will see this name in eg. 'ps' or 'top' command
+process.title = 'node-chat';
+// Port where we'll run the websocket server
+var webSocketsServerPort = process.env.WEBSOCKETPORT;
 // websocket and http servers
 var webSocketServer = require('websocket').server;
-var WebSocketClient = require('websocket').client;
-var WebSocketFrame  = require('websocket').frame;
-var WebSocketRouter = require('websocket').router;
-var W3CWebSocket = require('websocket').w3cwebsocket;
-
+var http = require('http');
+var server =require('./bin/www');
 /**
  * Global variables
  */
@@ -58,14 +28,14 @@ var colors = [ 'red', 'green', 'blue', 'magenta', 'purple', 'plum', 'orange' ];
 colors.sort(function(a,b) { return Math.random() > 0.5; } );
 /**
  * HTTP server
- */
- var server2 = http.createServer(function(request, response) {
+* Use the one from the  bin/www file
+var server = http.createServer(function(request, response) {
     // Not important for us. We're writing WebSocket server,
     // not HTTP server
 });
-
-server2.listen(webSocketsServerPort, function() {
-    debug((new Date()) + "\nWebSocket Server is listening on port: "
+ */
+server.listen(webSocketsServerPort, function() {
+    console.log((new Date()) + " Server is listening on port "
         + webSocketsServerPort);
 });
 
@@ -76,18 +46,13 @@ var wsServer = new webSocketServer({
     // WebSocket server is tied to a HTTP server. WebSocket
     // request is just an enhanced HTTP request. For more info
     // http://tools.ietf.org/html/rfc6455#page-6
-    httpServer: server2,
-    autoAcceptConnections: false
+    httpServer: server
 });
 // This callback function is called every time someone
 // tries to connect to the WebSocket server
 wsServer.on('request', function(request) {
-    debug((new Date())
-        + '\n Connection from origin ' + request.origin
-        + '\n httpRequest: ' + request.httpRequest
-        + '\n resource: ' + request.resource
-        + '\n requestedProtocols: ' + request.requestedProtocols
-        + '\n remoteAddress: ', + request.remoteAddress) ;
+    console.log((new Date()) + ' Connection from origin '
+        + request.origin + '.');
     // accept connection - you should check 'request.origin' to
     // make sure that client is connecting from your website
     // (http://en.wikipedia.org/wiki/Same_origin_policy)
@@ -96,7 +61,7 @@ wsServer.on('request', function(request) {
     var index = clients.push(connection) - 1;
     var userName = false;
     var userColor = false;
-    debug((new Date()) + ' Connection accepted.');
+    console.log((new Date()) + ' Connection accepted.');
     // send back chat history
     if (history.length > 0) {
         connection.sendUTF(
@@ -113,10 +78,10 @@ wsServer.on('request', function(request) {
                 userColor = colors.shift();
                 connection.sendUTF(
                     JSON.stringify({ type:'color', data: userColor }));
-                debug((new Date()) + ' User is known as: ' + userName
+                console.log((new Date()) + ' User is known as: ' + userName
                     + ' with ' + userColor + ' color.');
             } else { // log and broadcast the message
-                debug((new Date()) + ' Received Message from '
+                console.log((new Date()) + ' Received Message from '
                     + userName + ': ' + message.utf8Data);
 
                 // we want to keep history of all sent messages
@@ -139,7 +104,7 @@ wsServer.on('request', function(request) {
     // user disconnected
     connection.on('close', function(connection) {
         if (userName !== false && userColor !== false) {
-            debug((new Date()) + " Peer "
+            console.log((new Date()) + " Peer "
                 + connection.remoteAddress + " disconnected.");
             // remove user from the list of connected clients
             clients.splice(index, 1);
@@ -148,63 +113,3 @@ wsServer.on('request', function(request) {
         }
     });
 });
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-function normalizePort(val) {
-  var port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-}
-
-/**
- * Event listener for HTTP server "error" event.
- */
-
-function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-}
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('www Listening on ' + bind);
-}

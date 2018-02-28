@@ -11,5 +11,6 @@
     <orderEntry type="library" name="platform" level="application" />
     <orderEntry type="library" name="tether" level="application" />
     <orderEntry type="library" name="widgets" level="application" />
+    <orderEntry type="library" name="jquery-latest" level="application" />
   </component>
 </module>

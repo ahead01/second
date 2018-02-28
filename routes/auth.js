@@ -111,6 +111,7 @@ passport.use(new Google2Strategy({
     function(req, accessToken, refreshToken, profile, done) {
         console.log("Google authentication: ");
         console.log(JSON.stringify(profile));
+        console.log(profile);
         //JSON.stringify(profile._json);
         var json = profile.toString();
         //JSON.parse(json);
